@@ -1,4 +1,4 @@
-"""
+﻿"""
 Système d'authentification pour l'application
 Gestion des rôles admin et analyste
 """
@@ -12,12 +12,24 @@ from yaml.loader import SafeLoader
 class AuthManager:
     def __init__(self):
         self.config = self._load_auth_config()
+        self._ensure_session_state()
         self.authenticator = stauth.Authenticate(
             credentials=self.config['credentials'],
             cookie_name=self.config['cookie']['name'],
             cookie_key=self.config['cookie']['key'],
             cookie_expiry_days=self.config['cookie']['expiry_days']
         )
+
+    def _ensure_session_state(self):
+        defaults = {
+            'authentication_status': None,
+            'username': None,
+            'name': None,
+            'logout': False,
+        }
+        for cle, valeur in defaults.items():
+            if cle not in st.session_state:
+                st.session_state[cle] = valeur
     
     def _load_auth_config(self) -> Dict:
         """Charger la configuration d'authentification"""
@@ -78,6 +90,7 @@ class AuthManager:
             for key in ['name', 'authentication_status', 'username']:
                 if key in st.session_state:
                     del st.session_state[key]
+            st.session_state['logout'] = False
     
     def is_authenticated(self) -> bool:
         """Vérifier si l'utilisateur est authentifié"""
@@ -153,3 +166,5 @@ def show_user_info():
             if st.sidebar.button("🚪 Se déconnecter"):
                 auth_manager.logout()
                 st.rerun()
+
+
