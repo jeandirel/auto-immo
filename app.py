@@ -39,13 +39,13 @@ ACCUEIL_PAGE = "accueil"
 
 def initialiser_session():
     """Définir les valeurs par défaut de session et synchroniser l'état d'authentification."""
-defaults = {
-    "page": CONNEXION_PAGE,
-    "role": None,
-    "user_public": None,
-    "logout": False,
-    "admin_login_ready": False,
-}
+    defaults = {
+        "page": CONNEXION_PAGE,
+        "role": None,
+        "user_public": None,
+        "logout": False,
+        "admin_login_ready": False,
+    }
     for cle, valeur in defaults.items():
         if cle not in st.session_state:
             st.session_state[cle] = valeur
