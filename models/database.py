@@ -82,6 +82,15 @@ class Database:
                 valeur TEXT
             )
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS utilisateurs_publics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nom TEXT NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                mot_de_passe_hash TEXT NOT NULL,
+                date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
 
         # Table des utilisateurs (admin/analyste)
         cursor.execute('''
@@ -156,6 +165,38 @@ class Database:
             )
         conn.commit()
         conn.close()
+
+    def creer_utilisateur_public(self, nom: str, email: str, mot_de_passe_hash: str) -> int:
+        """Créer un utilisateur public."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            '''
+            INSERT INTO utilisateurs_publics (nom, email, mot_de_passe_hash)
+            VALUES (?, ?, ?)
+            ''',
+            (nom, email, mot_de_passe_hash),
+        )
+        user_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return user_id
+
+    def obtenir_utilisateur_public_par_email(self, email: str) -> Optional[Dict[str, Any]]:
+        """Récupérer un utilisateur public par email."""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            '''
+            SELECT id, nom, email, mot_de_passe_hash, date_creation
+            FROM utilisateurs_publics
+            WHERE email = ?
+            ''',
+            (email,),
+        )
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
     
     def ajouter_annonce(self, annonce_data: Dict[str, Any]) -> int:
         """Ajouter une nouvelle annonce"""

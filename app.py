@@ -1,4 +1,4 @@
-"""
+﻿"""
 Application principale - Site de petites annonces Gabon
 Immobilier, Véhicules, Matériel Informatique
 """
@@ -11,11 +11,11 @@ from utils.helpers import (
     format_prix,
     format_date,
     afficher_boutons_partage,
-    afficher_bouton_contact,
     afficher_galerie_photos,
     get_site_settings,
 )
-from utils.auth import auth_manager, show_user_info
+from utils.user_accounts import register_user, authenticate_user
+from utils.auth import auth_manager
 
 CATEGORIES_OPTIONS = [
     ("toutes", "Toutes catégories"),
@@ -32,6 +32,211 @@ TYPE_OPTIONS = [
 
 CATEGORY_LABELS = dict(CATEGORIES_OPTIONS)
 TYPE_LABELS = dict(TYPE_OPTIONS)
+
+CONNEXION_PAGE = "connexion"
+ACCUEIL_PAGE = "accueil"
+
+
+def initialiser_session():
+    """Définir les valeurs par défaut de session et synchroniser l'état d'authentification."""
+    defaults = {
+        "page": CONNEXION_PAGE,
+        "role": None,
+        "user_public": None,
+    }
+    for cle, valeur in defaults.items():
+        if cle not in st.session_state:
+            st.session_state[cle] = valeur
+
+    # Synchroniser avec l'état de streamlit-authenticator
+    if auth_manager.is_authenticated():
+        role_admin = auth_manager.get_user_role()
+        if role_admin and st.session_state.get("role") not in ("admin", "analyst"):
+            st.session_state["role"] = role_admin
+            st.session_state["page"] = ACCUEIL_PAGE
+            st.session_state["user_public"] = None
+    else:
+        if st.session_state.get("role") in ("admin", "analyst"):
+            st.session_state["role"] = None
+            st.session_state["page"] = CONNEXION_PAGE
+
+
+def reset_session():
+    """Réinitialiser les informations de navigation et d'authentification."""
+    keys_to_clear = [
+        "role",
+        "user_public",
+        "search_inputs",
+        "annonce_selectionnee",
+        "page_numero",
+    ]
+    for key in keys_to_clear:
+        st.session_state.pop(key, None)
+
+    st.session_state["role"] = None
+    st.session_state["user_public"] = None
+    st.session_state["page"] = CONNEXION_PAGE
+
+    try:
+        auth_manager.logout()
+    except Exception:
+        pass
+
+
+def afficher_sidebar():
+    """Afficher le panneau latéral selon le rôle courant."""
+    role = st.session_state.get("role")
+
+    st.sidebar.markdown("### Navigation")
+
+    if role in ("admin", "analyst"):
+        if not auth_manager.is_authenticated():
+            reset_session()
+            st.rerun()
+
+        user = auth_manager.get_current_user()
+        if user:
+            st.sidebar.success(f"👤 Connecté : {user['name']}")
+            st.sidebar.info(f"🎭 Rôle : {user['role'].title()}")
+
+        if role == "admin":
+            if st.sidebar.button("Gestion des annonces"):
+                st.session_state.page = "admin"
+                st.rerun()
+
+        if role in ("admin", "analyst"):
+            if st.sidebar.button("Analytics"):
+                st.session_state.page = "analytics"
+                st.rerun()
+
+        if st.sidebar.button("Se déconnecter"):
+            reset_session()
+            st.rerun()
+
+    elif role == "user":
+        user = st.session_state.get("user_public") or {}
+        st.sidebar.success(f"👤 Connecté : {user.get('nom', 'Utilisateur')}")
+        st.sidebar.info("🎭 Rôle : Utilisateur")
+        if st.sidebar.button("Se déconnecter"):
+            reset_session()
+            st.rerun()
+
+    elif role == "guest":
+        st.sidebar.info("Navigation en tant qu'invité")
+        if st.sidebar.button("Changer de mode"):
+            reset_session()
+            st.rerun()
+
+    else:
+        st.sidebar.info("Choisissez un mode pour accéder au site.")
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### Pages légales")
+    if st.sidebar.button("Mentions légales"):
+        st.session_state.page = "mentions_legales"
+        st.rerun()
+    if st.sidebar.button("Politique de confidentialité"):
+        st.session_state.page = "politique_confidentialite"
+        st.rerun()
+
+
+def afficher_page_connexion():
+    """Portail de connexion / inscription / invité."""
+    st.markdown(
+        """
+        <div class="login-hero">
+            <h1>AUTO-IMMO</h1>
+            <p>Choisissez comment accéder à la plateforme.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col_login, col_signup, col_guest = st.columns((3, 3, 2))
+
+    with col_login:
+        st.markdown('<div class="auth-card">', unsafe_allow_html=True)
+        st.markdown("#### Se connecter", unsafe_allow_html=True)
+        profil = st.radio(
+            "Je suis :",
+            ["Utilisateur", "Admin / Analyste"],
+            horizontal=True,
+            key="login_profile",
+        )
+
+        if profil == "Utilisateur":
+            with st.form("login_user_form"):
+                email = st.text_input("Email", key="login_email")
+                mot_de_passe = st.text_input(
+                    "Mot de passe", type="password", key="login_password"
+                )
+                submit_login = st.form_submit_button("Se connecter")
+
+            if submit_login:
+                ok, utilisateur, message = authenticate_user(email, mot_de_passe)
+                if ok:
+                    st.success(message)
+                    st.session_state["role"] = "user"
+                    st.session_state["user_public"] = utilisateur
+                    st.session_state["page"] = ACCUEIL_PAGE
+                    st.rerun()
+                else:
+                    st.error(message)
+        else:
+            st.info("Administrateur ou analyste : utilisez vos identifiants dédiés.")
+            name, status, username = auth_manager.login_form()
+            if status:
+                st.success("Connexion réussie.")
+                st.session_state["role"] = auth_manager.get_user_role() or "admin"
+                st.session_state["user_public"] = None
+                st.session_state["page"] = ACCUEIL_PAGE
+                st.rerun()
+            elif status is False:
+                st.error("Identifiants incorrects.")
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with col_signup:
+        st.markdown('<div class="auth-card">', unsafe_allow_html=True)
+        st.markdown("#### Créer un compte utilisateur", unsafe_allow_html=True)
+        with st.form("signup_form"):
+            nom = st.text_input("Nom complet")
+            email = st.text_input("Email")
+            mot_de_passe = st.text_input("Mot de passe", type="password")
+            confirmation = st.text_input("Confirmer le mot de passe", type="password")
+            submit_signup = st.form_submit_button("Créer mon compte")
+
+        if submit_signup:
+            if mot_de_passe != confirmation:
+                st.error("Les mots de passe ne correspondent pas.")
+            else:
+                ok, message = register_user(nom, email, mot_de_passe)
+                if ok:
+                    st.success(message)
+                    ok_auth, utilisateur, _ = authenticate_user(email, mot_de_passe)
+                    if ok_auth:
+                        st.session_state["role"] = "user"
+                        st.session_state["user_public"] = utilisateur
+                        st.session_state["page"] = ACCUEIL_PAGE
+                        st.rerun()
+                else:
+                    st.error(message)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with col_guest:
+        st.markdown('<div class="auth-card auth-card--guest">', unsafe_allow_html=True)
+        st.markdown("#### Visiter en invité", unsafe_allow_html=True)
+        st.write(
+            "Parcourez les annonces librement sans créer de compte. "
+            "Vous pourrez toujours vous inscrire plus tard."
+        )
+        if st.button("Continuer en invité", use_container_width=True):
+            st.session_state["role"] = "guest"
+            st.session_state["user_public"] = None
+            st.session_state["page"] = ACCUEIL_PAGE
+            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # Configuration de la page
 st.set_page_config(
@@ -459,53 +664,29 @@ def afficher_statistiques_globales():
 def main():
     """Fonction principale"""
     init_database()
+    initialiser_session()
 
-    show_user_info()
+    if st.session_state.get("page") == CONNEXION_PAGE or st.session_state.get("role") is None:
+        afficher_page_connexion()
+        return
 
-    if not auth_manager.is_authenticated():
-        st.sidebar.header("Connexion Admin / Analyste")
-        name, authentication_status, username = auth_manager.login_form()
+    afficher_sidebar()
 
-        if authentication_status is False:
-            st.sidebar.error("Nom d'utilisateur ou mot de passe incorrect")
-        elif authentication_status is None:
-            st.sidebar.warning("Veuillez entrer vos identifiants")
-    else:
-        st.sidebar.header("Espace administration")
-        if auth_manager.is_admin():
-            if st.sidebar.button("Gestion des annonces"):
-                st.session_state.page = 'admin'
-                st.rerun()
+    page = st.session_state.get("page", ACCUEIL_PAGE)
 
-        if auth_manager.is_admin() or auth_manager.is_analyst():
-            if st.sidebar.button("Analytics"):
-                st.session_state.page = 'analytics'
-                st.rerun()
-
-    st.sidebar.header("Informations légales")
-    if st.sidebar.button("Mentions légales"):
-        st.session_state.page = 'mentions_legales'
-        st.rerun()
-
-    if st.sidebar.button("Politique de confidentialité"):
-        st.session_state.page = 'politique_confidentialite'
-        st.rerun()
-
-    page = st.session_state.get('page', 'accueil')
-
-    if page == 'accueil':
+    if page == ACCUEIL_PAGE:
         filtres, criteres = afficher_hero()
 
         afficher_categories()
         st.markdown("---")
 
-        if st.session_state.get('filtre_categorie'):
-            categorie = st.session_state.pop('filtre_categorie')
-            filtres['categorie'] = categorie
-            criteres['categorie'] = categorie
+        if st.session_state.get("filtre_categorie"):
+            categorie = st.session_state.pop("filtre_categorie")
+            filtres["categorie"] = categorie
+            criteres["categorie"] = categorie
 
-            search_inputs = st.session_state.get('search_inputs', {})
-            search_inputs['categorie'] = categorie
+            search_inputs = st.session_state.get("search_inputs", {})
+            search_inputs["categorie"] = categorie
             st.session_state.search_inputs = search_inputs
             st.session_state.page_numero = 1
 
@@ -513,38 +694,48 @@ def main():
         st.markdown("---")
         afficher_statistiques_globales()
 
-    elif page == 'detail_annonce':
+    elif page == "detail_annonce":
         from pages.detail_annonce import afficher_detail_annonce
 
-        annonce_id = st.session_state.get('annonce_selectionnee')
+        annonce_id = st.session_state.get("annonce_selectionnee")
         if annonce_id:
             afficher_detail_annonce(annonce_id)
         else:
             st.error("Aucune annonce sélectionnée")
             if st.button("Retour à l'accueil"):
-                st.session_state.page = 'accueil'
+                st.session_state.page = ACCUEIL_PAGE
                 st.rerun()
 
-    elif page == 'admin':
+    elif page == "admin":
+        if st.session_state.get("role") != "admin":
+            st.error("Accès réservé à l'administrateur.")
+            st.session_state.page = ACCUEIL_PAGE
+            st.rerun()
         from pages.admin import main as admin_main
 
         admin_main()
 
-    elif page == 'analytics':
+    elif page == "analytics":
+        if st.session_state.get("role") not in ("admin", "analyst"):
+            st.error("Accès réservé à l'administrateur ou à l'analyste.")
+            st.session_state.page = ACCUEIL_PAGE
+            st.rerun()
         from pages.analytics import main as analytics_main
 
         analytics_main()
 
-    elif page == 'mentions_legales':
+    elif page == "mentions_legales":
         from pages.mentions_legales import main as mentions_main
 
         mentions_main()
 
-    elif page == 'politique_confidentialite':
+    elif page == "politique_confidentialite":
         from pages.politique_confidentialite import main as politique_main
 
         politique_main()
 
+
 if __name__ == "__main__":
     main()
+
 

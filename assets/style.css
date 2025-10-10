@@ -136,6 +136,74 @@ section {
     color: rgba(255, 255, 255, 0.9);
 }
 
+.login-hero {
+    text-align: center;
+    margin: 3rem 0 2.5rem;
+}
+
+.login-hero h1 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--neutral-700);
+}
+
+.login-hero p {
+    color: var(--neutral-400);
+    font-size: 1rem;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auth-card h4,
+.auth-card h3,
+.auth-card h2 {
+    margin: 0;
+    color: var(--neutral-700);
+    font-weight: 600;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.auth-card .stButton>button {
+    width: 100%;
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.9rem;
+    background: var(--primary-500);
+    border: 1px solid var(--primary-500);
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: var(--shadow-sm);
+}
+
+.auth-card .stButton>button:hover {
+    background: var(--primary-600);
+    border-color: var(--primary-600);
+}
+
+.auth-card .stRadio [role="radiogroup"] {
+    justify-content: space-between;
+}
+
+.auth-card--guest {
+    background: linear-gradient(135deg, var(--primary-50), #ffffff);
+    border: 1px solid rgba(0, 89, 179, 0.12);
+}
+
 .hero__title {
     font-size: clamp(2.2rem, 4vw, 3rem);
     font-weight: 600;
