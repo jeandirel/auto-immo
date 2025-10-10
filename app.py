@@ -39,11 +39,13 @@ ACCUEIL_PAGE = "accueil"
 
 def initialiser_session():
     """Définir les valeurs par défaut de session et synchroniser l'état d'authentification."""
-    defaults = {
-        "page": CONNEXION_PAGE,
-        "role": None,
-        "user_public": None,
-    }
+defaults = {
+    "page": CONNEXION_PAGE,
+    "role": None,
+    "user_public": None,
+    "logout": False,
+    "admin_login_ready": False,
+}
     for cle, valeur in defaults.items():
         if cle not in st.session_state:
             st.session_state[cle] = valeur
@@ -76,6 +78,8 @@ def reset_session():
     st.session_state["role"] = None
     st.session_state["user_public"] = None
     st.session_state["page"] = CONNEXION_PAGE
+    st.session_state["logout"] = False
+    st.session_state["admin_login_ready"] = False
 
     try:
         auth_manager.logout()
@@ -165,6 +169,7 @@ def afficher_page_connexion():
         )
 
         if profil == "Utilisateur":
+            st.session_state["admin_login_ready"] = False
             with st.form("login_user_form"):
                 email = st.text_input("Email", key="login_email")
                 mot_de_passe = st.text_input(
@@ -184,6 +189,10 @@ def afficher_page_connexion():
                     st.error(message)
         else:
             st.info("Administrateur ou analyste : utilisez vos identifiants dédiés.")
+            if not st.session_state.get("admin_login_ready"):
+                auth_manager.logout()
+                st.session_state["logout"] = False
+                st.session_state["admin_login_ready"] = True
             name, status, username = auth_manager.login_form()
             if status:
                 st.success("Connexion réussie.")
