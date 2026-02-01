@@ -693,7 +693,7 @@ function LoginPage() {
         if (login(email, password)) {
             navigate('/')
         } else {
-            setError('Identifiants incorrects. Utilisez : admin@auto-immo.ga / admin')
+            setError('Identifiants incorrects.')
         }
     }
 
@@ -717,7 +717,7 @@ function LoginPage() {
                             className="w-full border rounded-lg px-4 py-2"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="admin@auto-immo.ga"
+                            placeholder="Votre email"
                         />
                     </div>
 
@@ -741,11 +741,7 @@ function LoginPage() {
                     </button>
                 </form>
 
-                <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-                    <p className="text-sm text-gray-600 font-semibold mb-2">📝 Identifiants de démo :</p>
-                    <p className="text-xs text-gray-600">Email : admin@auto-immo.ga</p>
-                    <p className="text-xs text-gray-600">Mot de passe : admin</p>
-                </div>
+
             </div>
         </div>
     )
