@@ -57,7 +57,6 @@ function AnnonceProvider({ children }) {
             ...nouvelleAnnonce,
             id: Date.now(),
             status: 'active',
-<<<<<<< HEAD
             createdAt: new Date().toISOString(),
             // Contact par défaut pour toutes les annonces
             contact: {
@@ -65,9 +64,6 @@ function AnnonceProvider({ children }) {
                 tel: '+24107100275',
                 email: 'contact@auto-immo.info'
             }
-=======
-            createdAt: new Date().toISOString()
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         }
         const nouvellesAnnonces = [annonce, ...annonces]
         setAnnonces(nouvellesAnnonces)
@@ -234,9 +230,9 @@ function Navbar() {
                             </Link>
                         )}
                     </div>
-                </div>
-            </div>
-        </nav>
+                </div >
+            </div >
+        </nav >
     )
 }
 
@@ -778,8 +774,8 @@ function LoginPage() {
                     <p className="text-xs text-gray-600">Mot de passe : admin</p>
                 </div>
 >>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
