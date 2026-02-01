@@ -131,11 +131,7 @@ const ANNONCES_DATA = [
         quartier: 'Glass',
         description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine équipée. Jardin et garage.',
         photos: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
-<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
-=======
-        contact: { nom: 'Jean Koumba', tel: '+241 06 12 34 56', email: 'j.koumba@example.com' },
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { surface: 250, chambres: 4 }
     },
     {
@@ -147,11 +143,7 @@ const ANNONCES_DATA = [
         ville: 'Port-Gentil',
         description: 'Land Cruiser en excellent état, 45000 km, toutes options.',
         photos: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
-<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
-=======
-        contact: { nom: 'Marie Obame', tel: '+241 07 23 45 67' },
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { marque: 'Toyota', modele: 'Land Cruiser', annee: 2020, kilometrage: 45000 }
     },
     {
@@ -163,11 +155,7 @@ const ANNONCES_DATA = [
         ville: 'Libreville',
         description: 'MacBook Pro 16" M2 Pro, 16GB RAM, 512GB SSD. Comme neuf, facture disponible.',
         photos: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800'],
-<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
-=======
-        contact: { nom: 'David Ndong', tel: '+241 06 34 56 78' },
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { marque: 'Apple', modele: 'MacBook Pro', etat: 'Comme neuf' }
     },
 ]
