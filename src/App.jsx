@@ -57,7 +57,13 @@ function AnnonceProvider({ children }) {
             ...nouvelleAnnonce,
             id: Date.now(),
             status: 'active',
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            // Contact par défaut pour toutes les annonces
+            contact: {
+                nom: 'auto-immo(Sonny)',
+                tel: '+24107100275',
+                email: 'contact@auto-immo.info'
+            }
         }
         const nouvellesAnnonces = [annonce, ...annonces]
         setAnnonces(nouvellesAnnonces)
@@ -125,7 +131,7 @@ const ANNONCES_DATA = [
         quartier: 'Glass',
         description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine équipée. Jardin et garage.',
         photos: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
-        contact: { nom: 'Jean Koumba', tel: '+241 06 12 34 56', email: 'j.koumba@example.com' },
+        contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { surface: 250, chambres: 4 }
     },
     {
@@ -137,7 +143,7 @@ const ANNONCES_DATA = [
         ville: 'Port-Gentil',
         description: 'Land Cruiser en excellent état, 45000 km, toutes options.',
         photos: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
-        contact: { nom: 'Marie Obame', tel: '+241 07 23 45 67' },
+        contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { marque: 'Toyota', modele: 'Land Cruiser', annee: 2020, kilometrage: 45000 }
     },
     {
@@ -149,7 +155,7 @@ const ANNONCES_DATA = [
         ville: 'Libreville',
         description: 'MacBook Pro 16" M2 Pro, 16GB RAM, 512GB SSD. Comme neuf, facture disponible.',
         photos: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800'],
-        contact: { nom: 'David Ndong', tel: '+241 06 34 56 78' },
+        contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { marque: 'Apple', modele: 'MacBook Pro', etat: 'Comme neuf' }
     },
 ]
@@ -170,7 +176,9 @@ function Navbar() {
         <nav className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
-                    <Link to="/" className="text-2xl font-bold">AUTO-IMMO</Link>
+                    <Link to="/" className="flex items-center">
+                        <img src="/logo.jpg" alt="AUTO-IMMO" className="h-20 w-auto object-contain" />
+                    </Link>
                     <div className="flex gap-4 items-center">
                         <Link to="/" className="hover:text-gabon-yellow transition">Accueil</Link>
 
