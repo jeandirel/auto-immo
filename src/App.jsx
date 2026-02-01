@@ -176,13 +176,9 @@ function Navbar() {
         <nav className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
-<<<<<<< HEAD
                     <Link to="/" className="flex items-center">
                         <img src="/logo.jpg" alt="AUTO-IMMO" className="h-20 w-auto object-contain" />
                     </Link>
-=======
-                    <Link to="/" className="text-2xl font-bold">AUTO-IMMO</Link>
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
                     <div className="flex gap-4 items-center">
                         <Link to="/" className="hover:text-gabon-yellow transition">Accueil</Link>
 
