@@ -693,11 +693,7 @@ function LoginPage() {
         if (login(email, password)) {
             navigate('/')
         } else {
-<<<<<<< HEAD
             setError('Identifiants incorrects.')
-=======
-            setError('Identifiants incorrects. Utilisez : admin@auto-immo.ga / admin')
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         }
     }
 
