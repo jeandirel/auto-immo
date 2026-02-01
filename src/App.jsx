@@ -57,6 +57,7 @@ function AnnonceProvider({ children }) {
             ...nouvelleAnnonce,
             id: Date.now(),
             status: 'active',
+<<<<<<< HEAD
             createdAt: new Date().toISOString(),
             // Contact par défaut pour toutes les annonces
             contact: {
@@ -64,6 +65,9 @@ function AnnonceProvider({ children }) {
                 tel: '+24107100275',
                 email: 'contact@auto-immo.info'
             }
+=======
+            createdAt: new Date().toISOString()
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         }
         const nouvellesAnnonces = [annonce, ...annonces]
         setAnnonces(nouvellesAnnonces)
@@ -131,7 +135,11 @@ const ANNONCES_DATA = [
         quartier: 'Glass',
         description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine équipée. Jardin et garage.',
         photos: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
+<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
+=======
+        contact: { nom: 'Jean Koumba', tel: '+241 06 12 34 56', email: 'j.koumba@example.com' },
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { surface: 250, chambres: 4 }
     },
     {
@@ -143,7 +151,11 @@ const ANNONCES_DATA = [
         ville: 'Port-Gentil',
         description: 'Land Cruiser en excellent état, 45000 km, toutes options.',
         photos: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
+<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
+=======
+        contact: { nom: 'Marie Obame', tel: '+241 07 23 45 67' },
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { marque: 'Toyota', modele: 'Land Cruiser', annee: 2020, kilometrage: 45000 }
     },
     {
@@ -155,7 +167,11 @@ const ANNONCES_DATA = [
         ville: 'Libreville',
         description: 'MacBook Pro 16" M2 Pro, 16GB RAM, 512GB SSD. Comme neuf, facture disponible.',
         photos: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800'],
+<<<<<<< HEAD
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
+=======
+        contact: { nom: 'David Ndong', tel: '+241 06 34 56 78' },
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         details: { marque: 'Apple', modele: 'MacBook Pro', etat: 'Comme neuf' }
     },
 ]
@@ -176,9 +192,13 @@ function Navbar() {
         <nav className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
+<<<<<<< HEAD
                     <Link to="/" className="flex items-center">
                         <img src="/logo.jpg" alt="AUTO-IMMO" className="h-20 w-auto object-contain" />
                     </Link>
+=======
+                    <Link to="/" className="text-2xl font-bold">AUTO-IMMO</Link>
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
                     <div className="flex gap-4 items-center">
                         <Link to="/" className="hover:text-gabon-yellow transition">Accueil</Link>
 
@@ -693,7 +713,11 @@ function LoginPage() {
         if (login(email, password)) {
             navigate('/')
         } else {
+<<<<<<< HEAD
             setError('Identifiants incorrects.')
+=======
+            setError('Identifiants incorrects. Utilisez : admin@auto-immo.ga / admin')
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
         }
     }
 
@@ -717,7 +741,11 @@ function LoginPage() {
                             className="w-full border rounded-lg px-4 py-2"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+<<<<<<< HEAD
                             placeholder="Votre email"
+=======
+                            placeholder="admin@auto-immo.ga"
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
                         />
                     </div>
 
@@ -741,7 +769,15 @@ function LoginPage() {
                     </button>
                 </form>
 
+<<<<<<< HEAD
 
+=======
+                <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                    <p className="text-sm text-gray-600 font-semibold mb-2">📝 Identifiants de démo :</p>
+                    <p className="text-xs text-gray-600">Email : admin@auto-immo.ga</p>
+                    <p className="text-xs text-gray-600">Mot de passe : admin</p>
+                </div>
+>>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
             </div>
         </div>
     )
