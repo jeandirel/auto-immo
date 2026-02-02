@@ -833,9 +833,9 @@ function App() {
 
                         <footer className="bg-gray-800 text-white py-8 mt-12">
                             <div className="container mx-auto px-4 text-center">
-                                <p>ï¿½ 2026 AUTO-IMMO - Petites Annonces Gabon</p>
-                                <p className="text-sm text-gray-400 mt-2">???? Dï¿½veloppï¿½ avec ?? pour le Gabon</p>
-                                <p className="text-xs text-gray-500 mt-1">Dï¿½veloppï¿½ par <span className="text-primary font-semibold">Ogoouï¿½ Artificial Intelligence (Ogoouï¿½ AI)</span></p>
+                                <p>© 2026 AUTO-IMMO - Petites Annonces Gabon</p>
+                                <p className="text-sm text-gray-400 mt-2">🇬🇦 Développé avec ❤️ pour le Gabon</p>
+                                <p className="text-sm text-gray-500 mt-1">Développé par <span className="text-primary font-semibold">Ogooué Artificial Intelligence (Ogooué AI) 🚀</span></p>
                             </div>
                         </footer>
                     </div>
