@@ -717,11 +717,7 @@ function LoginPage() {
                             className="w-full border rounded-lg px-4 py-2"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-<<<<<<< HEAD
                             placeholder="Votre email"
-=======
-                            placeholder="admin@auto-immo.ga"
->>>>>>> 614239f76c312bf0e139b1fa1810d8b35110f0a4
                         />
                     </div>
 
