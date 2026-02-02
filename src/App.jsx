@@ -58,7 +58,7 @@ function AnnonceProvider({ children }) {
             id: Date.now(),
             status: 'active',
             createdAt: new Date().toISOString(),
-            // Contact par dï¿½faut pour toutes les annonces
+            // Contact par défaut pour toutes les annonces
             contact: {
                 nom: 'auto-immo(Sonny)',
                 tel: '+24107100275',
@@ -80,7 +80,7 @@ function AnnonceProvider({ children }) {
     }
 
     const supprimerAnnonce = (id) => {
-        if (!window.confirm('?? ï¿½tes-vous sï¿½r de vouloir supprimer cette annonce ? Cette action est irrï¿½versible.')) {
+        if (!window.confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.')) {
             return false
         }
         const nouvellesAnnonces = annonces.filter(a => a.id !== id)
@@ -129,7 +129,7 @@ const ANNONCES_DATA = [
         type: 'vente',
         ville: 'Libreville',
         quartier: 'Glass',
-        description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine ï¿½quipï¿½e. Jardin et garage.',
+        description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine équipée. Jardin et garage.',
         photos: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { surface: 250, chambres: 4 }
@@ -141,7 +141,7 @@ const ANNONCES_DATA = [
         categorie: 'vehicules',
         type: 'vente',
         ville: 'Port-Gentil',
-        description: 'Land Cruiser en excellent ï¿½tat, 45000 km, toutes options.',
+        description: 'Land Cruiser en excellent état, 45000 km, toutes options.',
         photos: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { marque: 'Toyota', modele: 'Land Cruiser', annee: 2020, kilometrage: 45000 }
@@ -163,7 +163,7 @@ const ANNONCES_DATA = [
 const VILLES = ['Libreville', 'Port-Gentil', 'Franceville', 'Oyem', 'Moanda']
 const CATEGORIES = [
     { key: 'immobilier', label: 'Immobilier', icon: Building },
-    { key: 'vehicules', label: 'VÃ©hicules', icon: Car },
+    { key: 'vehicules', label: 'Véhicules', icon: Car },
     { key: 'informatique', label: 'Informatique', icon: Laptop },
 ]
 
@@ -203,7 +203,7 @@ function Navbar() {
                                         className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition"
                                     >
                                         <LogOut size={20} />
-                                        Dï¿½connexion
+                                        Déconnexion
                                     </button>
                                 </div>
                             </>
@@ -244,7 +244,7 @@ function HomePage() {
             <div className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white py-16">
                 <div className="container mx-auto px-4 text-center">
                     <h1 className="text-5xl font-bold mb-4">Trouvez le bien qui vous ressemble</h1>
-                    <p className="text-xl mb-8">Immobilier, VÃ©hicules et matÃ©riel informatique au Gabon</p>
+                    <p className="text-xl mb-8">Immobilier, Véhicules et matériel informatique au Gabon</p>
 
                     {/* Filtres */}
                     <div className="bg-white rounded-lg p-6 text-gray-800 max-w-4xl mx-auto">
