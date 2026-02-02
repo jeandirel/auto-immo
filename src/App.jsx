@@ -254,7 +254,7 @@ function HomePage() {
                                 value={filters.categorie}
                                 onChange={(e) => setFilters({ ...filters, categorie: e.target.value })}
                             >
-                                <option value="">Toutes catÃ©gories</option>
+                                <option value="">Toutes catégories</option>
                                 {CATEGORIES.map(cat => <option key={cat.key} value={cat.key}>{cat.label}</option>)}
                             </select>
 
