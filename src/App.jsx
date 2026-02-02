@@ -1,4 +1,4 @@
-﻿import { useState, createContext, useContext } from 'react'
+﻿import { useState, createContext, useContext, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom'
 import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin } from 'lucide-react'
 import FormulaireIntelligent from './FormulaireIntelligent'
