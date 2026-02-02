@@ -310,43 +310,40 @@ export default function DetailAnnoncePro() {
 
                             {/* 7️⃣ CONTACT */}
                             {annonce.contact && (
-                                {
-                                    annonce.contact && (
-                                        <div className="bg-white rounded-2xl p-6 shadow-lg">
-                                            <h3 className="text-2xl font-bold mb-6 text-gray-900">Contact</h3>
-                                            <div className="space-y-4 mb-6">
-                                                {annonce.contact.nom && (
-                                                    <div className="flex items-center gap-3">
-                                                        <User size={20} className="text-gray-600" />
-                                                        <span className="text-gray-900 font-medium">{annonce.contact.nom}</span>
-                                                    </div>
-                                                )}
-                                                {annonce.contact.tel && (
-                                                    <div className="flex items-center gap-3">
-                                                        <Phone size={20} className="text-gray-600" />
-                                                        <span className="text-gray-900 font-medium">{annonce.contact.tel}</span>
-                                                    </div>
-                                                )}
-                                                {annonce.contact.email && (
-                                                    <div className="flex items-center gap-3">
-                                                        <Mail size={20} className="text-gray-600" />
-                                                        <span className="text-gray-900 font-medium text-sm">{annonce.contact.email}</span>
-                                                    </div>
-                                                )}
+                                <div className="bg-white rounded-2xl p-6 shadow-lg">
+                                    <h3 className="text-2xl font-bold mb-6 text-gray-900">Contact</h3>
+                                    <div className="space-y-4 mb-6">
+                                        {annonce.contact.nom && (
+                                            <div className="flex items-center gap-3">
+                                                <User size={20} className="text-gray-600" />
+                                                <span className="text-gray-900 font-medium">{annonce.contact.nom}</span>
                                             </div>
+                                        )}
+                                        {annonce.contact.tel && (
+                                            <div className="flex items-center gap-3">
+                                                <Phone size={20} className="text-gray-600" />
+                                                <span className="text-gray-900 font-medium">{annonce.contact.tel}</span>
+                                            </div>
+                                        )}
+                                        {annonce.contact.email && (
+                                            <div className="flex items-center gap-3">
+                                                <Mail size={20} className="text-gray-600" />
+                                                <span className="text-gray-900 font-medium text-sm">{annonce.contact.email}</span>
+                                            </div>
+                                        )}
+                                    </div>
 
-                                            {/* CTA Principal */}
-                                            {annonce.contact.tel && (
-                                                <a
-                                                    href={`tel:${annonce.contact.tel}`}
-                                                    className="block w-full bg-gradient-to-r from-primary to-secondary text-white text-center py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
-                                                >
-                                                    📞 Appeler maintenant
-                                                </a>
-                                            )}
-                                        </div>
-                                    )
-                                }
+                                    {/* CTA Principal */}
+                                    {annonce.contact.tel && (
+                                        <a
+                                            href={`tel:${annonce.contact.tel}`}
+                                            className="block w-full bg-gradient-to-r from-primary to-secondary text-white text-center py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
+                                        >
+                                            📞 Appeler maintenant
+                                        </a>
+                                    )}
+                                </div>
+                            )}
 
                             {/* DEMANDE D'INFO RAPIDE (NOUVEAU) */}
                             <RequestInfo annonceId={annonce.id} />
