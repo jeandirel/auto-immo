@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from 'react'
+﻿import { useState, createContext, useContext } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom'
 import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin } from 'lucide-react'
 import FormulaireIntelligent from './FormulaireIntelligent'
@@ -48,7 +48,7 @@ function AnnonceProvider({ children }) {
         if (saved) {
             return JSON.parse(saved)
         }
-        // Ajouter status:active aux donn�es initiales
+        // Ajouter status:active aux donnï¿½es initiales
         return ANNONCES_DATA.map(a => ({ ...a, status: 'active' }))
     })
 
@@ -58,7 +58,7 @@ function AnnonceProvider({ children }) {
             id: Date.now(),
             status: 'active',
             createdAt: new Date().toISOString(),
-            // Contact par d�faut pour toutes les annonces
+            // Contact par dï¿½faut pour toutes les annonces
             contact: {
                 nom: 'auto-immo(Sonny)',
                 tel: '+24107100275',
@@ -80,7 +80,7 @@ function AnnonceProvider({ children }) {
     }
 
     const supprimerAnnonce = (id) => {
-        if (!window.confirm('?? �tes-vous s�r de vouloir supprimer cette annonce ? Cette action est irr�versible.')) {
+        if (!window.confirm('?? ï¿½tes-vous sï¿½r de vouloir supprimer cette annonce ? Cette action est irrï¿½versible.')) {
             return false
         }
         const nouvellesAnnonces = annonces.filter(a => a.id !== id)
@@ -119,7 +119,7 @@ const useAnnonces = () => useContext(AnnonceContext)
 // Export hooks for use in other components
 export { useAuth, useAnnonces }
 
-// Donn�es d'exemple
+// Donnï¿½es d'exemple
 const ANNONCES_DATA = [
     {
         id: 1,
@@ -129,7 +129,7 @@ const ANNONCES_DATA = [
         type: 'vente',
         ville: 'Libreville',
         quartier: 'Glass',
-        description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine �quip�e. Jardin et garage.',
+        description: 'Magnifique villa moderne avec 4 chambres, salon spacieux, cuisine ï¿½quipï¿½e. Jardin et garage.',
         photos: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { surface: 250, chambres: 4 }
@@ -141,7 +141,7 @@ const ANNONCES_DATA = [
         categorie: 'vehicules',
         type: 'vente',
         ville: 'Port-Gentil',
-        description: 'Land Cruiser en excellent �tat, 45000 km, toutes options.',
+        description: 'Land Cruiser en excellent ï¿½tat, 45000 km, toutes options.',
         photos: ['https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800'],
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { marque: 'Toyota', modele: 'Land Cruiser', annee: 2020, kilometrage: 45000 }
@@ -163,7 +163,7 @@ const ANNONCES_DATA = [
 const VILLES = ['Libreville', 'Port-Gentil', 'Franceville', 'Oyem', 'Moanda']
 const CATEGORIES = [
     { key: 'immobilier', label: 'Immobilier', icon: Building },
-    { key: 'vehicules', label: 'V�hicules', icon: Car },
+    { key: 'vehicules', label: 'VÃ©hicules', icon: Car },
     { key: 'informatique', label: 'Informatique', icon: Laptop },
 ]
 
@@ -203,7 +203,7 @@ function Navbar() {
                                         className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition"
                                     >
                                         <LogOut size={20} />
-                                        D�connexion
+                                        Dï¿½connexion
                                     </button>
                                 </div>
                             </>
@@ -244,7 +244,7 @@ function HomePage() {
             <div className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white py-16">
                 <div className="container mx-auto px-4 text-center">
                     <h1 className="text-5xl font-bold mb-4">Trouvez le bien qui vous ressemble</h1>
-                    <p className="text-xl mb-8">Immobilier, v�hicules et mat�riel informatique au Gabon</p>
+                    <p className="text-xl mb-8">Immobilier, VÃ©hicules et matÃ©riel informatique au Gabon</p>
 
                     {/* Filtres */}
                     <div className="bg-white rounded-lg p-6 text-gray-800 max-w-4xl mx-auto">
@@ -254,7 +254,7 @@ function HomePage() {
                                 value={filters.categorie}
                                 onChange={(e) => setFilters({ ...filters, categorie: e.target.value })}
                             >
-                                <option value="">Toutes cat�gories</option>
+                                <option value="">Toutes catÃ©gories</option>
                                 {CATEGORIES.map(cat => <option key={cat.key} value={cat.key}>{cat.label}</option>)}
                             </select>
 
@@ -282,9 +282,9 @@ function HomePage() {
                 </div>
             </div>
 
-            {/* Cat�gories */}
+            {/* catÃ©gories */}
             <div className="container mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-8">Nos cat�gories</h2>
+                <h2 className="text-3xl font-bold mb-8">Nos catÃ©gories</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {CATEGORIES.map(cat => {
                         const Icon = cat.icon
@@ -306,7 +306,7 @@ function HomePage() {
 
             {/* Liste annonces */}
             <div className="container mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-8">Derni�res annonces ({filteredAnnonces.length})</h2>
+                <h2 className="text-3xl font-bold mb-8">Derniï¿½res annonces ({filteredAnnonces.length})</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {filteredAnnonces.map(annonce => (
                         <div
@@ -374,8 +374,8 @@ function DetailAnnonce() {
     if (!annonce) {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
-                <h2 className="text-2xl font-bold text-gray-700">Annonce non trouv�e</h2>
-                <button onClick={() => navigate('/')} className="mt-4 text-primary">? Retour � l'accueil</button>
+                <h2 className="text-2xl font-bold text-gray-700">Annonce non trouvï¿½e</h2>
+                <button onClick={() => navigate('/')} className="mt-4 text-primary">? Retour ï¿½ l'accueil</button>
             </div>
         )
     }
@@ -383,7 +383,7 @@ function DetailAnnonce() {
     const shareUrl = window.location.href
     const isAdmin = user && user.role === 'admin'
 
-    // Fonction pour ouvrir le modal � une photo sp�cifique
+    // Fonction pour ouvrir le modal ï¿½ une photo spï¿½cifique
     const openModal = (index = 0) => {
         setCurrentPhotoIndex(index)
         setShowModal(true)
@@ -395,7 +395,7 @@ function DetailAnnonce() {
             return <span className="bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-semibold">?? En Pause</span>
         }
         if (annonce.status === 'archived') {
-            return <span className="bg-gray-500 text-white px-4 py-2 rounded-full text-sm font-semibold">?? Archiv�</span>
+            return <span className="bg-gray-500 text-white px-4 py-2 rounded-full text-sm font-semibold">?? Archivï¿½</span>
         }
         return null
     }
@@ -515,14 +515,14 @@ function DetailAnnonce() {
                                                 <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
                                             </svg>
                                         </div>
-                                        <h3 className="text-xl font-bold text-gray-800">D�tails</h3>
+                                        <h3 className="text-xl font-bold text-gray-800">Dï¿½tails</h3>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                         {Object.entries(annonce.details).map(([key, value]) => {
                                             if (Array.isArray(value) && value.length === 0) return null
                                             if (!value && value !== false) return null
 
-                                            // Format le nom de la cl�
+                                            // Format le nom de la clï¿½
                                             const label = key
                                                 .replace(/_/g, ' ')
                                                 .split(' ')
@@ -729,7 +729,7 @@ function LoginPage() {
                             className="w-full border rounded-lg px-4 py-2"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="������"
+                            placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                         />
                     </div>
 
@@ -756,11 +756,11 @@ function NouvelleAnnonce() {
     const handleSubmit = (annonceComplete) => {
         const annonce = ajouterAnnonce(annonceComplete)
 
-        // Message de confirmation d�taill�
-        const message = `?? ANNONCE PUBLI�E AVEC SUCC�S !\n\n` +
+        // Message de confirmation dï¿½taillï¿½
+        const message = `?? ANNONCE PUBLIï¿½E AVEC SUCCï¿½S !\n\n` +
             `? Titre : ${annonce.titre}\n` +
             `?? Photos : ${photos.length}\n` +
-            `? Qualit� : ${annonceComplete.qualite}\n` +
+            `? Qualitï¿½ : ${annonceComplete.qualite}\n` +
             `?? Slug SEO : ${annonceComplete.slug}\n\n` +
             `?? Redirection vers la page d'accueil...`
 
@@ -773,7 +773,7 @@ function NouvelleAnnonce() {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
                 <div className="bg-red-100 border border-red-400 text-red-700 px-8 py-6 rounded-lg max-w-md mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">⚠️ Accès refusé</h2>
+                    <h2 className="text-2xl font-bold mb-4">âš ï¸ AccÃ¨s refusÃ©</h2>
                     <p className="mb-4">Seul l'administrateur peut publier des annonces.</p>
                     <button onClick={() => navigate('/login')} className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition">
                         Se connecter
@@ -786,7 +786,7 @@ function NouvelleAnnonce() {
     return (
         <div className="container mx-auto px-4 py-12 max-w-4xl">
             <h1 className="text-4xl font-bold mb-2">Publier une annonce</h1>
-            <p className="text-gray-600 mb-8">Formulaire intelligent adapté à votre catégorie</p>
+            <p className="text-gray-600 mb-8">Formulaire intelligent adaptÃ© Ã  votre catÃ©gorie</p>
             <FormulaireIntelligent onSubmit={handleSubmit} photos={photos} setPhotos={setPhotos} isDragging={isDragging} setIsDragging={setIsDragging} />
         </div>
     )
@@ -809,9 +809,9 @@ function App() {
 
                         <footer className="bg-gray-800 text-white py-8 mt-12">
                             <div className="container mx-auto px-4 text-center">
-                                <p>� 2026 AUTO-IMMO - Petites Annonces Gabon</p>
-                                <p className="text-sm text-gray-400 mt-2">???? D�velopp� avec ?? pour le Gabon</p>
-                                <p className="text-xs text-gray-500 mt-1">D�velopp� par <span className="text-primary font-semibold">Ogoou� Artificial Intelligence (Ogoou� AI)</span></p>
+                                <p>ï¿½ 2026 AUTO-IMMO - Petites Annonces Gabon</p>
+                                <p className="text-sm text-gray-400 mt-2">???? Dï¿½veloppï¿½ avec ?? pour le Gabon</p>
+                                <p className="text-xs text-gray-500 mt-1">Dï¿½veloppï¿½ par <span className="text-primary font-semibold">Ogoouï¿½ Artificial Intelligence (Ogoouï¿½ AI)</span></p>
                             </div>
                         </footer>
                     </div>
