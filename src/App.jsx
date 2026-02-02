@@ -773,7 +773,7 @@ function LoginPage() {
                             className="w-full border rounded-lg px-4 py-2"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+                            placeholder="entrez un mot de passe"
                         />
                     </div>
 
