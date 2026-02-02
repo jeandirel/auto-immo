@@ -5,6 +5,9 @@ import { useAnnonces, useAuth } from '../App'
 import { Modal, PhotoCarousel } from './Modal'
 import AdminActions from './AdminActions'
 import ImageCarousel from './ImageCarousel'
+import AvailabilityCalendar from './AvailabilityCalendar'
+import ReserveNow from './ReserveNow'
+import RequestInfo from './RequestInfo'
 
 export default function DetailAnnoncePro() {
     const { annonces, supprimerAnnonce, archiverAnnonce, togglePauseAnnonce } = useAnnonces()
@@ -12,7 +15,9 @@ export default function DetailAnnoncePro() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false)
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
+    const [dateSelection, setDateSelection] = useState({ start: null, end: null })
 
     const annonce = annonces.find(a => a.id === parseInt(id))
 
@@ -287,42 +292,65 @@ export default function DetailAnnoncePro() {
 
                         {/* Colonne latérale */}
                         <div className="space-y-6">
-                            {/* 7️⃣ CONTACT */}
-                            {annonce.contact && (
-                                <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-24">
-                                    <h3 className="text-2xl font-bold mb-6 text-gray-900">Contact</h3>
-                                    <div className="space-y-4 mb-6">
-                                        {annonce.contact.nom && (
-                                            <div className="flex items-center gap-3">
-                                                <User size={20} className="text-gray-600" />
-                                                <span className="text-gray-900 font-medium">{annonce.contact.nom}</span>
-                                            </div>
-                                        )}
-                                        {annonce.contact.tel && (
-                                            <div className="flex items-center gap-3">
-                                                <Phone size={20} className="text-gray-600" />
-                                                <span className="text-gray-900 font-medium">{annonce.contact.tel}</span>
-                                            </div>
-                                        )}
-                                        {annonce.contact.email && (
-                                            <div className="flex items-center gap-3">
-                                                <Mail size={20} className="text-gray-600" />
-                                                <span className="text-gray-900 font-medium text-sm">{annonce.contact.email}</span>
-                                            </div>
-                                        )}
+                            {/* MODULE DE RÉSERVATION (NOUVEAU) */}
+                            {annonce.typeAnnonce !== 'vente' && (
+                                <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-24 z-10">
+                                    <h3 className="text-xl font-bold mb-4 text-gray-900 border-b pb-2">Planifier une visite</h3>
+                                    <AvailabilityCalendar
+                                        annonceId={annonce.id}
+                                        onDateSelect={setDateSelection}
+                                    />
+                                    <div className="mt-4">
+                                        <ReserveNow
+                                            annonce={annonce}
+                                            dateSelection={dateSelection}
+                                        />
                                     </div>
-
-                                    {/* CTA Principal */}
-                                    {annonce.contact.tel && (
-                                        <a
-                                            href={`tel:${annonce.contact.tel}`}
-                                            className="block w-full bg-gradient-to-r from-primary to-secondary text-white text-center py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
-                                        >
-                                            📞 Appeler maintenant
-                                        </a>
-                                    )}
                                 </div>
                             )}
+
+                            {/* 7️⃣ CONTACT */}
+                            {annonce.contact && (
+                                {
+                                    annonce.contact && (
+                                        <div className="bg-white rounded-2xl p-6 shadow-lg">
+                                            <h3 className="text-2xl font-bold mb-6 text-gray-900">Contact</h3>
+                                            <div className="space-y-4 mb-6">
+                                                {annonce.contact.nom && (
+                                                    <div className="flex items-center gap-3">
+                                                        <User size={20} className="text-gray-600" />
+                                                        <span className="text-gray-900 font-medium">{annonce.contact.nom}</span>
+                                                    </div>
+                                                )}
+                                                {annonce.contact.tel && (
+                                                    <div className="flex items-center gap-3">
+                                                        <Phone size={20} className="text-gray-600" />
+                                                        <span className="text-gray-900 font-medium">{annonce.contact.tel}</span>
+                                                    </div>
+                                                )}
+                                                {annonce.contact.email && (
+                                                    <div className="flex items-center gap-3">
+                                                        <Mail size={20} className="text-gray-600" />
+                                                        <span className="text-gray-900 font-medium text-sm">{annonce.contact.email}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* CTA Principal */}
+                                            {annonce.contact.tel && (
+                                                <a
+                                                    href={`tel:${annonce.contact.tel}`}
+                                                    className="block w-full bg-gradient-to-r from-primary to-secondary text-white text-center py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
+                                                >
+                                                    📞 Appeler maintenant
+                                                </a>
+                                            )}
+                                        </div>
+                                    )
+                                }
+
+                            {/* DEMANDE D'INFO RAPIDE (NOUVEAU) */}
+                            <RequestInfo annonceId={annonce.id} />
 
                             {/* 8️⃣ PARTAGE */}
                             <div className="bg-white rounded-2xl p-6 shadow-lg">
