@@ -539,7 +539,7 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
                                 </div>
                             </div>
 
-                            </div>
+
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                 {['acces_route', 'terrain_plat', 'borne', 'titre_foncier', 'lotissement'].map(field => (
@@ -584,296 +584,296 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
                                 </div>
                             </div>
                         </div>
-            )
-}
+                    )
+                    }
 
-            {/* Champs spécifiques VÉHICULES */}
-            {
-                categorie === 'vehicules' && (
-                    <div className="bg-white p-6 rounded-xl shadow-md">
-                        <h3 className="text-xl font-bold mb-4">Caractéristiques du véhicule</h3>
+                    {/* Champs spécifiques VÉHICULES */}
+                    {
+                        categorie === 'vehicules' && (
+                            <div className="bg-white p-6 rounded-xl shadow-md">
+                                <h3 className="text-xl font-bold mb-4">Caractéristiques du véhicule</h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label className="block mb-2 font-semibold">Marque *</label>
-                                <select
-                                    required
-                                    value={detailsVehicule.marque}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, marque: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                >
-                                    <option value="">-- Sélectionnez --</option>
-                                    {CATEGORIES_DETAILS.vehicules.marques.map(m => (
-                                        <option key={m} value={m}>{m}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Marque *</label>
+                                        <select
+                                            required
+                                            value={detailsVehicule.marque}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, marque: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        >
+                                            <option value="">-- Sélectionnez --</option>
+                                            {CATEGORIES_DETAILS.vehicules.marques.map(m => (
+                                                <option key={m} value={m}>{m}</option>
+                                            ))}
+                                        </select>
+                                    </div>
 
-                            <div>
-                                <label className="block mb-2 font-semibold">Modèle *</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={detailsVehicule.modele}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, modele: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                            <div>
-                                <label className="block mb-2 font-semibold">Année *</label>
-                                <input
-                                    type="number"
-                                    required
-                                    value={detailsVehicule.annee}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, annee: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block mb-2 font-semibold">Kilométrage *</label>
-                                <input
-                                    type="number"
-                                    required
-                                    value={detailsVehicule.kilometrage}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, kilometrage: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block mb-2 font-semibold">Couleur</label>
-                                <input
-                                    type="text"
-                                    value={detailsVehicule.couleur}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, couleur: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label className="block mb-2 font-semibold">Carburant *</label>
-                                <select
-                                    required
-                                    value={detailsVehicule.carburant}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, carburant: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                >
-                                    <option value="">-- Sélectionnez --</option>
-                                    {CATEGORIES_DETAILS.vehicules.carburants.map(c => (
-                                        <option key={c} value={c}>{c}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="block mb-2 font-semibold">Boîte de vitesses *</label>
-                                <select
-                                    required
-                                    value={detailsVehicule.boite}
-                                    onChange={(e) => setDetailsVehicule({ ...detailsVehicule, boite: e.target.value })}
-                                    className="w-full border-2 rounded-lg px-4 py-2"
-                                >
-                                    <option value="">-- Sélectionnez --</option>
-                                    {CATEGORIES_DETAILS.vehicules.boites.map(b => (
-                                        <option key={b} value={b}>{b}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block mb-2 font-semibold">Options du véhicule</label>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                                {CATEGORIES_DETAILS.vehicules.options.map(opt => (
-                                    <label key={opt} className="flex items-center gap-2 p-2 border rounded hover:bg-gray-50">
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Modèle *</label>
                                         <input
-                                            type="checkbox"
-                                            checked={detailsVehicule.options.includes(opt)}
-                                            onChange={(e) => {
-                                                if (e.target.checked) {
-                                                    setDetailsVehicule({
-                                                        ...detailsVehicule,
-                                                        options: [...detailsVehicule.options, opt]
-                                                    })
-                                                } else {
-                                                    setDetailsVehicule({
-                                                        ...detailsVehicule,
-                                                        options: detailsVehicule.options.filter(o => o !== opt)
-                                                    })
-                                                }
-                                            }}
-                                            className="w-4 h-4"
+                                            type="text"
+                                            required
+                                            value={detailsVehicule.modele}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, modele: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
                                         />
-                                        <span className="text-sm">{opt}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
-
-            {/* Prix & Conditions */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-xl font-bold mb-4">Prix & Conditions</h3>
-
-                {(typeAnnonce === 'vente' || typeAnnonce === 'vente_location') && (
-                    <div className="mb-4">
-                        <label className="block mb-2 font-semibold">Prix de vente (FCFA) *</label>
-                        <input
-                            type="number"
-                            required={typeAnnonce !== 'location'}
-                            value={formData.prix}
-                            onChange={(e) => setFormData({ ...formData, prix: e.target.value })}
-                            className="w-full border-2 rounded-lg px-4 py-2"
-                        />
-                        <label className="flex items-center gap-2 mt-2">
-                            <input
-                                type="checkbox"
-                                checked={formData.negociable}
-                                onChange={(e) => setFormData({ ...formData, negociable: e.target.checked })}
-                                className="w-4 h-4"
-                            />
-                            <span className="text-sm">Prix négociable</span>
-                        </label>
-                    </div>
-                )}
-
-                {(typeAnnonce === 'location' || typeAnnonce === 'vente_location') && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block mb-2 font-semibold">Loyer mensuel (FCFA) *</label>
-                            <input
-                                type="number"
-                                required={typeAnnonce !== 'vente'}
-                                value={formData.loyer}
-                                onChange={(e) => setFormData({ ...formData, loyer: e.target.value })}
-                                className="w-full border-2 rounded-lg px-4 py-2"
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-2 font-semibold">Caution (FCFA)</label>
-                            <input
-                                type="number"
-                                value={formData.caution}
-                                onChange={(e) => setFormData({ ...formData, caution: e.target.value })}
-                                className="w-full border-2 rounded-lg px-4 py-2"
-                            />
-                        </div>
-                        <div>
-                            <label className="block mb-2 font-semibold">Avance (mois)</label>
-                            <input
-                                type="number"
-                                value={formData.avance}
-                                onChange={(e) => setFormData({ ...formData, avance: e.target.value })}
-                                className="w-full border-2 rounded-lg px-4 py-2"
-                            />
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Photos */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-xl font-bold mb-4">Photos * (min. 3 recommandées)</h3>
-
-                <div
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${isDragging
-                        ? 'border-primary bg-primary/10 scale-105'
-                        : 'border-gray-300 hover:border-primary hover:bg-gray-50'
-                        }`}
-                >
-                    <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-
-                    <div className="pointer-events-none">
-                        <div className="mx-auto w-16 h-16 mb-4 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
-                            <Upload className="w-8 h-8 text-white" />
-                        </div>
-
-                        <p className="text-lg font-bold text-gray-800 mb-2">
-                            {isDragging ? '📸 Déposez vos images ici' : 'Ajoutez vos photos'}
-                        </p>
-
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-lg font-semibold shadow-lg">
-                            Choisir des fichiers
-                        </div>
-                    </div>
-                </div>
-
-                {photos.length > 0 && (
-                    <div className="mt-6">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="bg-gradient-to-r from-primary to-secondary text-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
-                                {photos.length}
-                            </div>
-                            <p className="font-semibold text-gray-800">
-                                Photo{photos.length > 1 ? 's' : ''} sélectionnée{photos.length > 1 ? 's' : ''}
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-4 gap-4">
-                            {photos.map((photo, index) => (
-                                <div key={index} className="relative group">
-                                    <img
-                                        src={photo.preview}
-                                        alt={`Photo ${index + 1}`}
-                                        className="w-full h-32 object-cover rounded-xl shadow-md"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => removePhoto(index)}
-                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
-                                    >
-                                        <X size={16} />
-                                    </button>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
+
+                                <div className="grid grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Année *</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={detailsVehicule.annee}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, annee: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Kilométrage *</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={detailsVehicule.kilometrage}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, kilometrage: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Couleur</label>
+                                        <input
+                                            type="text"
+                                            value={detailsVehicule.couleur}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, couleur: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Carburant *</label>
+                                        <select
+                                            required
+                                            value={detailsVehicule.carburant}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, carburant: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        >
+                                            <option value="">-- Sélectionnez --</option>
+                                            {CATEGORIES_DETAILS.vehicules.carburants.map(c => (
+                                                <option key={c} value={c}>{c}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-semibold">Boîte de vitesses *</label>
+                                        <select
+                                            required
+                                            value={detailsVehicule.boite}
+                                            onChange={(e) => setDetailsVehicule({ ...detailsVehicule, boite: e.target.value })}
+                                            className="w-full border-2 rounded-lg px-4 py-2"
+                                        >
+                                            <option value="">-- Sélectionnez --</option>
+                                            {CATEGORIES_DETAILS.vehicules.boites.map(b => (
+                                                <option key={b} value={b}>{b}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="mb-4">
+                                    <label className="block mb-2 font-semibold">Options du véhicule</label>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                                        {CATEGORIES_DETAILS.vehicules.options.map(opt => (
+                                            <label key={opt} className="flex items-center gap-2 p-2 border rounded hover:bg-gray-50">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={detailsVehicule.options.includes(opt)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setDetailsVehicule({
+                                                                ...detailsVehicule,
+                                                                options: [...detailsVehicule.options, opt]
+                                                            })
+                                                        } else {
+                                                            setDetailsVehicule({
+                                                                ...detailsVehicule,
+                                                                options: detailsVehicule.options.filter(o => o !== opt)
+                                                            })
+                                                        }
+                                                    }}
+                                                    className="w-4 h-4"
+                                                />
+                                                <span className="text-sm">{opt}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {/* Prix & Conditions */}
+                    <div className="bg-white p-6 rounded-xl shadow-md">
+                        <h3 className="text-xl font-bold mb-4">Prix & Conditions</h3>
+
+                        {(typeAnnonce === 'vente' || typeAnnonce === 'vente_location') && (
+                            <div className="mb-4">
+                                <label className="block mb-2 font-semibold">Prix de vente (FCFA) *</label>
+                                <input
+                                    type="number"
+                                    required={typeAnnonce !== 'location'}
+                                    value={formData.prix}
+                                    onChange={(e) => setFormData({ ...formData, prix: e.target.value })}
+                                    className="w-full border-2 rounded-lg px-4 py-2"
+                                />
+                                <label className="flex items-center gap-2 mt-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.negociable}
+                                        onChange={(e) => setFormData({ ...formData, negociable: e.target.checked })}
+                                        className="w-4 h-4"
+                                    />
+                                    <span className="text-sm">Prix négociable</span>
+                                </label>
+                            </div>
+                        )}
+
+                        {(typeAnnonce === 'location' || typeAnnonce === 'vente_location') && (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label className="block mb-2 font-semibold">Loyer mensuel (FCFA) *</label>
+                                    <input
+                                        type="number"
+                                        required={typeAnnonce !== 'vente'}
+                                        value={formData.loyer}
+                                        onChange={(e) => setFormData({ ...formData, loyer: e.target.value })}
+                                        className="w-full border-2 rounded-lg px-4 py-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-2 font-semibold">Caution (FCFA)</label>
+                                    <input
+                                        type="number"
+                                        value={formData.caution}
+                                        onChange={(e) => setFormData({ ...formData, caution: e.target.value })}
+                                        className="w-full border-2 rounded-lg px-4 py-2"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block mb-2 font-semibold">Avance (mois)</label>
+                                    <input
+                                        type="number"
+                                        value={formData.avance}
+                                        onChange={(e) => setFormData({ ...formData, avance: e.target.value })}
+                                        className="w-full border-2 rounded-lg px-4 py-2"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
 
-            {/* Description */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-                <h3 className="text-xl font-bold mb-4">Description *</h3>
-                <textarea
-                    required
-                    rows={6}
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full border-2 rounded-lg px-4 py-2"
-                    placeholder="Décrivez le bien en détail, mentionnez le quartier, les commodités à proximité, les avantages..."
-                />
-                <p className="text-sm text-gray-500 mt-2">
-                    {formData.description.length} caractères | Recommandé : minimum 100 caractères
-                </p>
-            </div>
+                    {/* Photos */}
+                    <div className="bg-white p-6 rounded-xl shadow-md">
+                        <h3 className="text-xl font-bold mb-4">Photos * (min. 3 recommandées)</h3>
 
-            {/* Bouton de soumission */}
-            <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg transform hover:scale-105"
-            >
-                {isEditMode ? '✅ Mettre à jour l\'annonce' : '🚀 Publier l\'annonce'}
-            </button>
-        </>
-    )
-}
+                        <div
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                            className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${isDragging
+                                ? 'border-primary bg-primary/10 scale-105'
+                                : 'border-gray-300 hover:border-primary hover:bg-gray-50'
+                                }`}
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageUpload}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+
+                            <div className="pointer-events-none">
+                                <div className="mx-auto w-16 h-16 mb-4 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg">
+                                    <Upload className="w-8 h-8 text-white" />
+                                </div>
+
+                                <p className="text-lg font-bold text-gray-800 mb-2">
+                                    {isDragging ? '📸 Déposez vos images ici' : 'Ajoutez vos photos'}
+                                </p>
+
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-lg font-semibold shadow-lg">
+                                    Choisir des fichiers
+                                </div>
+                            </div>
+                        </div>
+
+                        {photos.length > 0 && (
+                            <div className="mt-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="bg-gradient-to-r from-primary to-secondary text-white w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                                        {photos.length}
+                                    </div>
+                                    <p className="font-semibold text-gray-800">
+                                        Photo{photos.length > 1 ? 's' : ''} sélectionnée{photos.length > 1 ? 's' : ''}
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-4 gap-4">
+                                    {photos.map((photo, index) => (
+                                        <div key={index} className="relative group">
+                                            <img
+                                                src={photo.preview}
+                                                alt={`Photo ${index + 1}`}
+                                                className="w-full h-32 object-cover rounded-xl shadow-md"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removePhoto(index)}
+                                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Description */}
+                    <div className="bg-white p-6 rounded-xl shadow-md">
+                        <h3 className="text-xl font-bold mb-4">Description *</h3>
+                        <textarea
+                            required
+                            rows={6}
+                            value={formData.description}
+                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            className="w-full border-2 rounded-lg px-4 py-2"
+                            placeholder="Décrivez le bien en détail, mentionnez le quartier, les commodités à proximité, les avantages..."
+                        />
+                        <p className="text-sm text-gray-500 mt-2">
+                            {formData.description.length} caractères | Recommandé : minimum 100 caractères
+                        </p>
+                    </div>
+
+                    {/* Bouton de soumission */}
+                    <button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-xl hover:shadow-xl transition-all font-bold text-lg transform hover:scale-105"
+                    >
+                        {isEditMode ? '✅ Mettre à jour l\'annonce' : '🚀 Publier l\'annonce'}
+                    </button>
+                </>
+            )
+            }
         </form >
     )
 }
