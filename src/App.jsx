@@ -158,6 +158,30 @@ const ANNONCES_DATA = [
         contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
         details: { marque: 'Apple', modele: 'MacBook Pro', etat: 'Comme neuf' }
     },
+    {
+        id: 4,
+        titre: 'Google Pixel Fold - 256GB - Neuf',
+        prix: 1250000,
+        categorie: 'informatique',
+        type: 'vente',
+        ville: 'Libreville',
+        description: 'Google Pixel Fold en excellent état. Écran pliable incroyable, 256GB de stockage. Idéal pour la productivité et le multimédia.',
+        photos: ['/images/fold_1.jpg', '/images/fold_2.jpg'],
+        contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
+        details: { marque: 'Google', modele: 'Pixel Fold', etat: 'Comme neuf', stockage: '256GB' }
+    },
+    {
+        id: 5,
+        titre: 'Toyota Land Cruiser Prado 2024 - Black Edition',
+        prix: 48000000,
+        categorie: 'vehicules',
+        type: 'vente',
+        ville: 'Libreville',
+        description: 'Toyota Land Cruiser Prado 2024, finition Black Edition. Moteur puissant, intérieur cuir, toutes options. Le roi de la route.',
+        photos: ['/images/prado_1.jpg', '/images/prado_2.jpg'],
+        contact: { nom: 'auto-immo(Sonny)', tel: '+24107100275', email: 'contact@auto-immo.info' },
+        details: { marque: 'Toyota', modele: 'Land Cruiser Prado', annee: 2024, kilometrage: 1500, carburant: 'Diesel', boite: 'Automatique' }
+    },
 ]
 
 const VILLES = ['Libreville', 'Port-Gentil', 'Franceville', 'Oyem', 'Moanda']
@@ -306,7 +330,7 @@ function HomePage() {
 
             {/* Liste annonces */}
             <div className="container mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-8">Derniï¿½res annonces ({filteredAnnonces.length})</h2>
+                <h2 className="text-3xl font-bold mb-8">Dernières annonces ({filteredAnnonces.length})</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {filteredAnnonces.map(annonce => (
                         <div
