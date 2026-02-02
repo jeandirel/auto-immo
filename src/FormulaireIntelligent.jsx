@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Upload, X, Check, AlertCircle } from 'lucide-react'
 import { CATEGORIES_DETAILS, VILLES_GABON, getQuartiersParVille, genererTitre, genererSlug } from './formData'
 
-export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isDragging, setIsDragging }) {
+export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isDragging, setIsDragging, initialData = null, isEditMode = false }) {
     // État du formulaire - Étape 1: Type & Catégorie
     const [typeAnnonce, setTypeAnnonce] = useState('vente')
     const [categorie, setCategorie] = useState('')
