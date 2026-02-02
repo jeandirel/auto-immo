@@ -15,7 +15,6 @@ export default function DetailAnnoncePro() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [showModal, setShowModal] = useState(false)
-    const [showModal, setShowModal] = useState(false)
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
     const [dateSelection, setDateSelection] = useState({ start: null, end: null })
 
