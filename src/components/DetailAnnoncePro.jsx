@@ -93,13 +93,13 @@ export default function DetailAnnoncePro() {
                     {/* 1️⃣ EN-TÊTE DE L'ANNONCE */}
                     <div className="bg-white rounded-2xl p-8 shadow-lg mb-6">
                         <div className="mb-6">
-                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                            <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
                                 {annonce.titre}
                             </h1>
 
                             {/* Prix dominant */}
                             <div className="flex items-baseline gap-4 mb-6">
-                                <p className="text-5xl md:text-6xl font-bold text-primary">
+                                <p className="text-4xl md:text-6xl font-bold text-primary">
                                     {annonce.prix?.toLocaleString() || annonce.loyer?.toLocaleString()}
                                     <span className="text-2xl ml-2">FCFA</span>
                                 </p>

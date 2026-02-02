@@ -46,11 +46,30 @@ function AnnonceProvider({ children }) {
     const [annonces, setAnnonces] = useState(() => {
         const saved = localStorage.getItem('annonces')
         if (saved) {
-            return JSON.parse(saved)
+            try {
+                // Auto-fix encoding issues in stored JSON
+                let cleanJson = saved
+                    .replace(/Ã©/g, 'é')
+                    .replace(/Ã¨/g, 'è')
+                    .replace(/Ã/g, 'à')
+                    .replace(/ï¿½/g, 'oe') // Approximation safe
+                    .replace(/Ã´/g, 'ô');
+
+                return JSON.parse(cleanJson)
+            } catch (e) {
+                console.error("Erreur lecture localStorage:", e)
+                return ANNONCES_DATA.map(a => ({ ...a, status: 'active' }))
+            }
         }
-        // Ajouter status:active aux donnï¿½es initiales
+        // Ajouter status:active aux données initiales
         return ANNONCES_DATA.map(a => ({ ...a, status: 'active' }))
     })
+
+    // Sauvegarde automatique avec nettoyage préventif
+    useEffect(() => {
+        const stringified = JSON.stringify(annonces);
+        localStorage.setItem('annonces', stringified);
+    }, [annonces]);
 
     const ajouterAnnonce = (nouvelleAnnonce) => {
         const annonce = {
@@ -199,40 +218,41 @@ function Navbar() {
     return (
         <nav className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white shadow-lg">
             <div className="container mx-auto px-4 py-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <Link to="/" className="flex items-center">
-                        <img src="/logo.jpg" alt="AUTO-IMMO" className="h-20 w-auto object-contain" />
+                        <img src="/logo.jpg" alt="AUTO-IMMO" className="h-16 md:h-20 w-auto object-contain" />
                     </Link>
-                    <div className="flex gap-4 items-center">
-                        <Link to="/" className="hover:text-gabon-yellow transition">Accueil</Link>
+                    <div className="flex gap-4 items-center flex-wrap justify-center">
+                        <Link to="/" className="hover:text-gabon-yellow transition text-sm md:text-base">Accueil</Link>
 
                         {user ? (
                             <>
                                 {user.role === 'admin' && (
-                                    <Link to="/nouvelle-annonce" className="flex items-center gap-2 bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                                        <Plus size={20} />
-                                        Publier
+                                    <Link to="/nouvelle-annonce" className="flex items-center gap-2 bg-white text-primary px-3 py-2 md:px-4 rounded-lg hover:bg-gray-100 transition text-sm md:text-base">
+                                        <Plus size={18} />
+                                        <span className="hidden md:inline">Publier</span>
+                                        <span className="md:hidden">Publier</span>
                                     </Link>
                                 )}
                                 <div className="flex items-center gap-2">
                                     <div className="flex items-center gap-2 bg-white/20 px-3 py-2 rounded-lg">
                                         <User size={16} />
-                                        <span className="text-sm">{user.nom}</span>
+                                        <span className="text-sm max-w-[100px] truncate">{user.nom}</span>
                                     </div>
                                     <button
                                         onClick={() => {
                                             logout()
                                             navigate('/')
                                         }}
-                                        className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition"
+                                        className="flex items-center gap-2 bg-white/20 px-3 py-2 md:px-4 rounded-lg hover:bg-white/30 transition text-sm md:text-base"
                                     >
-                                        <LogOut size={20} />
-                                        Déconnexion
+                                        <LogOut size={18} />
+                                        <span className="hidden md:inline">Déconnexion</span>
                                     </button>
                                 </div>
                             </>
                         ) : (
-                            <Link to="/login" className="flex items-center gap-2 bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                            <Link to="/login" className="flex items-center gap-2 bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition text-sm md:text-base">
                                 <LogIn size={20} />
                                 Connexion Admin
                             </Link>
@@ -265,10 +285,10 @@ function HomePage() {
     return (
         <div>
             {/* Hero */}
-            <div className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white py-16">
+            <div className="bg-gradient-to-r from-gabon-green via-primary to-secondary text-white py-12 md:py-16">
                 <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-5xl font-bold mb-4">Trouvez le bien qui vous ressemble</h1>
-                    <p className="text-xl mb-8">Immobilier, Véhicules et matériel informatique au Gabon</p>
+                    <h1 className="text-3xl md:text-5xl font-bold mb-4">Trouvez le bien qui vous ressemble</h1>
+                    <p className="text-lg md:text-xl mb-8">Immobilier, Véhicules et matériel informatique au Gabon</p>
 
                     {/* Filtres */}
                     <div className="bg-white rounded-lg p-6 text-gray-800 max-w-4xl mx-auto">
