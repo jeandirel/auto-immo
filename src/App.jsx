@@ -780,13 +780,13 @@ function NouvelleAnnonce() {
     const handleSubmit = (annonceComplete) => {
         const annonce = ajouterAnnonce(annonceComplete)
 
-        // Message de confirmation dï¿½taillï¿½
-        const message = `?? ANNONCE PUBLIï¿½E AVEC SUCCï¿½S !\n\n` +
-            `? Titre : ${annonce.titre}\n` +
-            `?? Photos : ${photos.length}\n` +
-            `? Qualitï¿½ : ${annonceComplete.qualite}\n` +
-            `?? Slug SEO : ${annonceComplete.slug}\n\n` +
-            `?? Redirection vers la page d'accueil...`
+        // Message de confirmation détaillé
+        const message = `🎉 ANNONCE PUBLIÉE AVEC SUCCÈS !\n\n` +
+            `📝 Titre : ${annonce.titre}\n` +
+            `📸 Photos : ${photos.length}\n` +
+            `⭐ Qualité : ${annonceComplete.qualite}\n` +
+            `🔗 Slug SEO : ${annonceComplete.slug}\n\n` +
+            `🏠 Redirection vers la page d'accueil...`
 
         alert(message)
         setPhotos([])
@@ -797,7 +797,7 @@ function NouvelleAnnonce() {
         return (
             <div className="container mx-auto px-4 py-12 text-center">
                 <div className="bg-red-100 border border-red-400 text-red-700 px-8 py-6 rounded-lg max-w-md mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">âš ï¸ AccÃ¨s refusÃ©</h2>
+                    <h2 className="text-2xl font-bold mb-4">⚠️ Accès refusé</h2>
                     <p className="mb-4">Seul l'administrateur peut publier des annonces.</p>
                     <button onClick={() => navigate('/login')} className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition">
                         Se connecter
@@ -810,7 +810,7 @@ function NouvelleAnnonce() {
     return (
         <div className="container mx-auto px-4 py-12 max-w-4xl">
             <h1 className="text-4xl font-bold mb-2">Publier une annonce</h1>
-            <p className="text-gray-600 mb-8">Formulaire intelligent adaptÃ© Ã  votre catÃ©gorie</p>
+            <p className="text-gray-600 mb-8">Formulaire intelligent adapté à votre catégorie</p>
             <FormulaireIntelligent onSubmit={handleSubmit} photos={photos} setPhotos={setPhotos} isDragging={isDragging} setIsDragging={setIsDragging} />
         </div>
     )
