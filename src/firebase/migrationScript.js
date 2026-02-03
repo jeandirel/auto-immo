@@ -1,7 +1,7 @@
 // Script de migration localStorage → Firebase
 // À exécuter UNE SEULE FOIS pour transférer les données existantes
 
-import { createAnnonce } from './firebase/annonceService';
+import { createAnnonce } from './annonceService';
 
 export const migrateLocalStorageToFirebase = async () => {
     try {

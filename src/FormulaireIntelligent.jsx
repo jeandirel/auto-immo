@@ -86,7 +86,6 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
                 loyer: initialData.loyer || '',
                 caution: initialData.caution || '',
                 avance: initialData.avance || 1,
-                avance: initialData.avance || 1,
                 charges_incluses: initialData.charges_incluses || false,
             })
 
