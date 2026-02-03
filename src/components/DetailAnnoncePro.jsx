@@ -27,8 +27,16 @@ export default function DetailAnnoncePro() {
         )
     }
 
+    // Debug logs
+    console.log("URL ID:", id, "Type:", typeof id)
+    console.log("Annonces loaded:", annonces.length)
+    if (annonces.length > 0) {
+        console.log("First log ID:", annonces[0].id, "Type:", typeof annonces[0].id)
+    }
+
     // Récupérer l'annonce (gestion ID string Firebase vs ID number locale)
     const annonce = annonces.find(a => String(a.id) === String(id))
+    console.log("Found annonce:", annonce)
 
     if (!annonce) {
         return (
