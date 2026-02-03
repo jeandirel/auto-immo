@@ -1,11 +1,12 @@
 ﻿import { useState, createContext, useContext, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom'
-import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin } from 'lucide-react'
+import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin, Map } from 'lucide-react'
 import FormulaireIntelligent from './FormulaireIntelligent'
 import { Modal, PhotoCarousel } from './components/Modal'
 import AdminActions from './components/AdminActions'
 import ModifierAnnonce from './components/ModifierAnnonce'
 import DetailAnnoncePro from './components/DetailAnnoncePro'
+import CarteLibreville from './components/CarteLibreville'
 
 // Context d'authentification
 const AuthContext = createContext()
@@ -67,9 +68,30 @@ function AnnonceProvider({ children }) {
 
     // Sauvegarde automatique avec nettoyage préventif
     useEffect(() => {
-        const stringified = JSON.stringify(annonces);
-        localStorage.setItem('annonces', stringified);
+        try {
+            const stringified = JSON.stringify(annonces);
+            localStorage.setItem('annonces', stringified);
+        } catch (e) {
+            console.error("Erreur sauvegarde localStorage:", e);
+            if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
+                alert("⚠️ ATTENTION : La mémoire de votre navigateur est pleine !\n\nImpossible de sauvegarder les nouvelles données. Veuillez supprimer quelques anciennes annonces pour faire de la place.");
+            }
+        }
     }, [annonces]);
+
+    const saveSafe = (data) => {
+        try {
+            localStorage.setItem('annonces', JSON.stringify(data));
+            return true;
+        } catch (e) {
+            console.error("Erreur saveSafe:", e);
+            if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
+                // L'alert est déjà géré par le useEffect, mais pour les appels directs :
+                // On ne fait rien ici pour éviter les doubles alertes si le useEffect déclenche aussi.
+            }
+            return false;
+        }
+    }
 
     const ajouterAnnonce = (nouvelleAnnonce) => {
         const annonce = {
@@ -86,7 +108,8 @@ function AnnonceProvider({ children }) {
         }
         const nouvellesAnnonces = [annonce, ...annonces]
         setAnnonces(nouvellesAnnonces)
-        localStorage.setItem('annonces', JSON.stringify(nouvellesAnnonces))
+        // La sauvegarde est gérée par useEffect, mais on garde pour compatibilité immédiate si besoin (redundant mais safe avec try/catch global du useEffect qui va aussi trigger)
+        // En vrai, le useEffect suffit. Je vais simplifier en enlevant le setItem explicite ici pour éviter le doublon et les erreurs doubles.
         return annonce
     }
 
@@ -95,7 +118,6 @@ function AnnonceProvider({ children }) {
             a.id === id ? { ...a, ...updatedData, updatedAt: new Date().toISOString() } : a
         )
         setAnnonces(nouvellesAnnonces)
-        localStorage.setItem('annonces', JSON.stringify(nouvellesAnnonces))
     }
 
     const supprimerAnnonce = (id) => {
@@ -104,7 +126,6 @@ function AnnonceProvider({ children }) {
         }
         const nouvellesAnnonces = annonces.filter(a => a.id !== id)
         setAnnonces(nouvellesAnnonces)
-        localStorage.setItem('annonces', JSON.stringify(nouvellesAnnonces))
         return true
     }
 
@@ -224,6 +245,9 @@ function Navbar() {
                     </Link>
                     <div className="flex gap-4 items-center flex-wrap justify-center">
                         <Link to="/" className="hover:text-gabon-yellow transition text-sm md:text-base">Accueil</Link>
+                        <Link to="/carte" className="hover:text-gabon-yellow transition text-sm md:text-base flex items-center gap-1">
+                            <Map size={16} /> Carte
+                        </Link>
 
                         {user ? (
                             <>
@@ -841,21 +865,32 @@ function App() {
         <AuthProvider>
             <AnnonceProvider>
                 <BrowserRouter>
-                    <div className="min-h-screen bg-gray-50">
+                    <div className="flex flex-col min-h-screen bg-gray-50">
                         <Navbar />
-                        <Routes>
-                            <Route path="/" element={<HomePage />} />
-                            <Route path="/annonce/:id" element={<DetailAnnoncePro />} />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/nouvelle-annonce" element={<NouvelleAnnonce />} />
-                            <Route path="/modifier-annonce/:id" element={<ModifierAnnonce />} />
-                        </Routes>
-
-                        <footer className="bg-gray-800 text-white py-8 mt-12">
-                            <div className="container mx-auto px-4 text-center">
-                                <p>© 2026 AUTO-IMMO - Petites Annonces Gabon</p>
-                                <p className="text-sm text-gray-400 mt-2">🇬🇦 Développé avec ❤️ pour le Gabon</p>
-                                <p className="text-sm text-gray-500 mt-1">Développé par <span className="text-primary font-semibold">Ogooué Artificial Intelligence (Ogooué AI) 🚀</span></p>
+                        <main className="flex-grow">
+                            <Routes>
+                                <Route path="/" element={<HomePage />} />
+                                <Route path="/annonce/:id" element={<DetailAnnonce />} />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route path="/nouvelle-annonce" element={
+                                    <PrivateRoute>
+                                        <NouvelleAnnonce />
+                                    </PrivateRoute>
+                                } />
+                                <Route path="/modifier-annonce/:id" element={
+                                    <PrivateRoute>
+                                        <ModifierAnnonce />
+                                    </PrivateRoute>
+                                } />
+                                <Route path="/carte" element={<CarteLibreville />} />
+                                <Route path="*" element={<Navigate to="/" />} />
+                            </Routes>
+                        </main>
+                        <footer className="bg-gray-800 text-white py-8 text-center">
+                            <div className="container mx-auto px-4">
+                                <p>&copy; {new Date().getFullYear()} AUTO-IMMO Gabon. Tous droits réservés.</p>
+                                <p className="text-gray-400 text-sm mt-2">Votre partenaire de confiance pour l'immobilier, les véhicules et l'informatique.</p>
+                                <p className="text-gray-500 text-xs mt-4">Développé par : <span className="text-primary font-semibold">Ogooué Artificial intelligence (Ogooué AI)</span></p>
                             </div>
                         </footer>
                     </div>
@@ -863,6 +898,11 @@ function App() {
             </AnnonceProvider>
         </AuthProvider>
     )
+}
+
+function PrivateRoute({ children }) {
+    const { user } = useAuth()
+    return user ? children : <Navigate to="/login" />
 }
 
 export default App
