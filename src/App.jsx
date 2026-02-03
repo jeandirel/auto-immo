@@ -40,93 +40,84 @@ function AuthProvider({ children }) {
 }
 
 const useAuth = () => useContext(AuthContext)
-// Context des annonces avec localStorage
+// Context des annonces avec Firebase
 const AnnonceContext = createContext()
 
 function AnnonceProvider({ children }) {
-    const [annonces, setAnnonces] = useState(() => {
-        const saved = localStorage.getItem('annonces')
-        if (saved) {
-            try {
-                // Auto-fix encoding issues in stored JSON
-                let cleanJson = saved
-                    .replace(/Ã©/g, 'é')
-                    .replace(/Ã¨/g, 'è')
-                    .replace(/Ã/g, 'à')
-                    .replace(/ï¿½/g, 'oe') // Approximation safe
-                    .replace(/Ã´/g, 'ô');
+    const [annonces, setAnnonces] = useState([])
+    const [loading, setLoading] = useState(true)
 
-                return JSON.parse(cleanJson)
-            } catch (e) {
-                console.error("Erreur lecture localStorage:", e)
-                return ANNONCES_DATA.map(a => ({ ...a, status: 'active' }))
-            }
-        }
-        // Ajouter status:active aux données initiales
-        return ANNONCES_DATA.map(a => ({ ...a, status: 'active' }))
-    })
-
-    // Sauvegarde automatique avec nettoyage préventif
+    // S'abonner aux changements Firebase en temps réel
     useEffect(() => {
+        import('./firebase/annonceService').then(({ subscribeToAnnonces }) => {
+            const unsubscribe = subscribeToAnnonces((firebaseAnnonces) => {
+                setAnnonces(firebaseAnnonces)
+                setLoading(false)
+            })
+            return () => unsubscribe()
+        }).catch(error => {
+            console.error("Erreur chargement Firebase:", error)
+            setLoading(false)
+        })
+
+        // Migration automatique localStorage → Firebase (une seule fois)
+        import('./firebase/migrationScript').then(({ migrateLocalStorageToFirebase }) => {
+            migrateLocalStorageToFirebase().then(result => {
+                if (result.success && result.successCount > 0) {
+                    alert(`✅ Migration réussie !\n\n${result.successCount} annonces transférées vers Firebase.\n\nVos données sont maintenant synchronisées sur tous les appareils.`)
+                }
+            })
+        }).catch(error => {
+            console.error("Erreur script migration:", error)
+        })
+    }, [])
+
+
+
+    const ajouterAnnonce = async (nouvelleAnnonce) => {
         try {
-            const stringified = JSON.stringify(annonces);
-            localStorage.setItem('annonces', stringified);
-        } catch (e) {
-            console.error("Erreur sauvegarde localStorage:", e);
-            if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
-                alert("⚠️ ATTENTION : La mémoire de votre navigateur est pleine !\n\nImpossible de sauvegarder les nouvelles données. Veuillez supprimer quelques anciennes annonces pour faire de la place.");
+            const { createAnnonce } = await import('./firebase/annonceService')
+            const annonce = {
+                ...nouvelleAnnonce,
+                status: 'active',
+                contact: {
+                    nom: 'auto-immo(Sonny)',
+                    tel: '+24107100275',
+                    email: 'contact@auto-immo.info'
+                }
             }
+            const newAnnonce = await createAnnonce(annonce)
+            return newAnnonce
+        } catch (error) {
+            console.error("Erreur ajout annonce:", error)
+            alert("Erreur lors de la création de l'annonce. Vérifiez votre connexion internet.")
+            throw error
         }
-    }, [annonces]);
+    }
 
-    const saveSafe = (data) => {
+    const modifierAnnonce = async (id, updatedData) => {
         try {
-            localStorage.setItem('annonces', JSON.stringify(data));
-            return true;
-        } catch (e) {
-            console.error("Erreur saveSafe:", e);
-            if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
-                // L'alert est déjà géré par le useEffect, mais pour les appels directs :
-                // On ne fait rien ici pour éviter les doubles alertes si le useEffect déclenche aussi.
-            }
-            return false;
+            const { updateAnnonce } = await import('./firebase/annonceService')
+            await updateAnnonce(id, updatedData)
+        } catch (error) {
+            console.error("Erreur modification annonce:", error)
+            alert("Erreur lors de la modification. Vérifiez votre connexion internet.")
         }
     }
 
-    const ajouterAnnonce = (nouvelleAnnonce) => {
-        const annonce = {
-            ...nouvelleAnnonce,
-            id: Date.now(),
-            status: 'active',
-            createdAt: new Date().toISOString(),
-            // Contact par défaut pour toutes les annonces
-            contact: {
-                nom: 'auto-immo(Sonny)',
-                tel: '+24107100275',
-                email: 'contact@auto-immo.info'
-            }
-        }
-        const nouvellesAnnonces = [annonce, ...annonces]
-        setAnnonces(nouvellesAnnonces)
-        // La sauvegarde est gérée par useEffect, mais on garde pour compatibilité immédiate si besoin (redundant mais safe avec try/catch global du useEffect qui va aussi trigger)
-        // En vrai, le useEffect suffit. Je vais simplifier en enlevant le setItem explicite ici pour éviter le doublon et les erreurs doubles.
-        return annonce
-    }
-
-    const modifierAnnonce = (id, updatedData) => {
-        const nouvellesAnnonces = annonces.map(a =>
-            a.id === id ? { ...a, ...updatedData, updatedAt: new Date().toISOString() } : a
-        )
-        setAnnonces(nouvellesAnnonces)
-    }
-
-    const supprimerAnnonce = (id) => {
+    const supprimerAnnonce = async (id) => {
         if (!window.confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.')) {
             return false
         }
-        const nouvellesAnnonces = annonces.filter(a => a.id !== id)
-        setAnnonces(nouvellesAnnonces)
-        return true
+        try {
+            const { deleteAnnonce } = await import('./firebase/annonceService')
+            await deleteAnnonce(id)
+            return true
+        } catch (error) {
+            console.error("Erreur suppression annonce:", error)
+            alert("Erreur lors de la suppression. Vérifiez votre connexion internet.")
+            return false
+        }
     }
 
     const archiverAnnonce = (id) => {

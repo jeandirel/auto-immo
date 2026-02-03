@@ -8,6 +8,10 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
     const [categorie, setCategorie] = useState('')
     const [sousCategorie, setSousCategorie] = useState('')
 
+    // NOUVEAU : État pour la vidéo (Lien ou Fichier)
+    const [videoLink, setVideoLink] = useState('')
+    const [videoFile, setVideoFile] = useState(null) // { name, type, data }
+
     // État du formulaire - Informations générales
     const [formData, setFormData] = useState({
         titre: '',
@@ -82,8 +86,13 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
                 loyer: initialData.loyer || '',
                 caution: initialData.caution || '',
                 avance: initialData.avance || 1,
+                avance: initialData.avance || 1,
                 charges_incluses: initialData.charges_incluses || false,
             })
+
+            // Pré-remplir vidéo
+            setVideoLink(initialData.videoLink || '')
+            setVideoFile(initialData.videoFile || null)
 
             // Pré-remplir les détails selon la catégorie
             if (initialData.details) {
@@ -186,6 +195,8 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
             avance: 1,
             charges_incluses: false,
         })
+        setVideoLink('')
+        setVideoFile(null)
         setDetailsImmobilier({
             chambres: '',
             salons: '',
@@ -234,6 +245,8 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
             categorie,
             sousCategorie,
             photos: photos.map(p => p.preview),
+            videoLink,   // Ajout lien vidéo
+            videoFile,   // Ajout fichier vidéo
             slug: genererSlug(formData.titre),
             details: categorie === 'immobilier' ? detailsImmobilier
                 : categorie === 'terrain' ? detailsTerrain
@@ -327,6 +340,27 @@ export default function FormulaireIntelligent({ onSubmit, photos, setPhotos, isD
 
     const removePhoto = (index) => {
         setPhotos(prev => prev.filter((_, i) => i !== index))
+    }
+
+    const handleVideoUpload = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        // Sécurité taille : Max 10Mo
+        if (file.size > 10 * 1024 * 1024) {
+            alert("⚠️ Vidéo trop volumineuse !\n\nLa taille maximale est de 10 Mo pour ne pas surcharger votre téléphone. Pour les vidéos plus longues, utilisez un lien YouTube ou TikTok.")
+            return
+        }
+
+        const reader = new FileReader()
+        reader.onloadend = () => {
+            setVideoFile({
+                name: file.name,
+                type: file.type,
+                data: reader.result // Base64
+            })
+        }
+        reader.readAsDataURL(file)
     }
 
     return (

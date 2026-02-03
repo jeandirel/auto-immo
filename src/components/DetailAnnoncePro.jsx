@@ -153,6 +153,61 @@ export default function DetailAnnoncePro() {
                                 </>
                             }
                         />
+
+                        {/* VIDÉO */}
+                        {(annonce.videoLink || annonce.videoFile) && (
+                            <div className="mt-6">
+                                <h3 className="text-xl font-bold mb-3 text-gray-900 flex items-center gap-2">
+                                    <span>🎥 Vidéo du bien</span>
+                                </h3>
+
+                                <div className="bg-black rounded-xl overflow-hidden aspect-video flex items-center justify-center shadow-lg relative">
+                                    {annonce.videoFile ? (
+                                        <video
+                                            controls
+                                            className="w-full h-full"
+                                            src={annonce.videoFile.data}
+                                            poster={annonce.photos?.[0]}
+                                        >
+                                            Votre navigateur ne supporte pas la lecture de vidéos.
+                                        </video>
+                                    ) : annonce.videoLink ? (
+                                        (() => {
+                                            // Tentative simple d'embed YouTube
+                                            const youtubeMatch = annonce.videoLink.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+                                            if (youtubeMatch && youtubeMatch[1]) {
+                                                return (
+                                                    <iframe
+                                                        width="100%"
+                                                        height="100%"
+                                                        src={`https://www.youtube.com/embed/${youtubeMatch[1]}`}
+                                                        title="Vidéo du bien"
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    ></iframe>
+                                                );
+                                            } else {
+                                                // Lien générique
+                                                return (
+                                                    <div className="text-center p-8">
+                                                        <a
+                                                            href={annonce.videoLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-full font-bold hover:bg-red-700 transition transform hover:scale-105"
+                                                        >
+                                                            ▷ Voir la vidéo HD
+                                                        </a>
+                                                        <p className="text-gray-400 mt-2 text-sm">Ouvrir sur {new URL(annonce.videoLink).hostname}</p>
+                                                    </div>
+                                                );
+                                            }
+                                        })()
+                                    ) : null}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Layout 2 colonnes */}
