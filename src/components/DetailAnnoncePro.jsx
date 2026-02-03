@@ -10,7 +10,7 @@ import ReserveNow from './ReserveNow'
 import RequestInfo from './RequestInfo'
 
 export default function DetailAnnoncePro() {
-    const { annonces, loading } = useAnnonces()
+    const { annonces, loading, supprimerAnnonce, archiverAnnonce, togglePauseAnnonce } = useAnnonces()
     const { user } = useAuth()
     const navigate = useNavigate()
     const { id } = useParams()
