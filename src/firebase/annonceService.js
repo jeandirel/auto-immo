@@ -5,9 +5,11 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    getDoc,
     getDocs,
     onSnapshot,
     query,
+    where,
     orderBy,
     serverTimestamp
 } from 'firebase/firestore';
@@ -16,35 +18,59 @@ import { db, storage } from './config';
 
 const COLLECTION_NAME = 'annonces';
 
-// Créer une annonce
-export const createAnnonce = async (annonceData) => {
+/**
+ * Crée ou met à jour une annonce dans Firestore.
+ * Si l'objet annonce a un `id`, le document existant est mis à jour.
+ * Sinon, un nouveau document est créé.
+ * @param {object} annonceData - Les données de l'annonce à sauvegarder.
+ * @returns {object} L'annonce sauvegardée avec son id.
+ */
+export const saveAnnonce = async (annonceData) => {
     try {
-        const docRef = await addDoc(collection(db, COLLECTION_NAME), {
-            ...annonceData,
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp(),
-            status: 'active'
-        });
-        return { id: docRef.id, ...annonceData };
+        if (annonceData.id) {
+            const { id, ...data } = annonceData;
+            const annonceRef = doc(db, COLLECTION_NAME, id);
+            await updateDoc(annonceRef, {
+                ...data,
+                updatedAt: serverTimestamp()
+            });
+            return annonceData;
+        } else {
+            const docRef = await addDoc(collection(db, COLLECTION_NAME), {
+                ...annonceData,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+                status: 'active'
+            });
+            return { id: docRef.id, ...annonceData };
+        }
     } catch (error) {
-        console.error("Erreur création annonce:", error);
+        console.error("Erreur sauvegarde annonce:", error);
         throw error;
     }
 };
 
-// Mettre à jour une annonce
-export const updateAnnonce = async (id, updates) => {
+/**
+ * Récupère une seule annonce par son ID.
+ * @param {string} id - L'ID de l'annonce.
+ * @returns {object|null} L'annonce ou null si elle n'existe pas.
+ */
+export const getAnnonceById = async (id) => {
     try {
-        const annonceRef = doc(db, COLLECTION_NAME, id);
-        await updateDoc(annonceRef, {
-            ...updates,
-            updatedAt: serverTimestamp()
-        });
+        const docRef = doc(db, COLLECTION_NAME, id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return { id: docSnap.id, ...docSnap.data() };
+        } else {
+            console.log("Aucun document trouvé!");
+            return null;
+        }
     } catch (error) {
-        console.error("Erreur mise à jour annonce:", error);
+        console.error("Erreur récupération annonce:", error);
         throw error;
     }
 };
+
 
 // Supprimer une annonce
 export const deleteAnnonce = async (id) => {
@@ -70,6 +96,34 @@ export const subscribeToAnnonces = (callback) => {
         console.error("Erreur écoute annonces:", error);
     });
 };
+
+/**
+ * Récupère les annonces en fonction de plusieurs critères de recherche.
+ * @param {object} filters - Un objet avec les filtres. Ex: { categorie: 'vehicule', ville: 'Paris' }
+ * @returns {Array<object>} Une liste d'annonces.
+ */
+export const getAnnoncesBy = async (filters) => {
+    try {
+        let q = query(collection(db, COLLECTION_NAME));
+
+        for (const key in filters) {
+            if (Object.hasOwnProperty.call(filters, key)) {
+                q = query(q, where(key, '==', filters[key]));
+            }
+        }
+
+        const querySnapshot = await getDocs(q);
+        const annonces = [];
+        querySnapshot.forEach((doc) => {
+            annonces.push({ id: doc.id, ...doc.data() });
+        });
+        return annonces;
+    } catch (error) {
+        console.error("Erreur récupération annonces par filtre:", error);
+        throw error;
+    }
+};
+
 
 // Récupérer toutes les annonces (une fois)
 export const getAnnonces = async () => {

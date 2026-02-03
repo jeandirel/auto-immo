@@ -1,4 +1,4 @@
-﻿import { useState, createContext, useContext, useEffect } from 'react'
+import { useState, createContext, useContext, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom'
 import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin, Map, Database } from 'lucide-react'
 import FormulaireIntelligent from './FormulaireIntelligent'
@@ -76,7 +76,7 @@ function AnnonceProvider({ children }) {
 
     const ajouterAnnonce = async (nouvelleAnnonce) => {
         try {
-            const { createAnnonce } = await import('./firebase/annonceService')
+            const { saveAnnonce } = await import('./firebase/annonceService')
             const annonce = {
                 ...nouvelleAnnonce,
                 status: 'active',
@@ -86,7 +86,7 @@ function AnnonceProvider({ children }) {
                     email: 'contact@auto-immo.info'
                 }
             }
-            const newAnnonce = await createAnnonce(annonce)
+            const newAnnonce = await saveAnnonce(annonce)
             return newAnnonce
         } catch (error) {
             console.error("Erreur ajout annonce:", error)
@@ -97,8 +97,8 @@ function AnnonceProvider({ children }) {
 
     const modifierAnnonce = async (id, updatedData) => {
         try {
-            const { updateAnnonce } = await import('./firebase/annonceService')
-            await updateAnnonce(id, updatedData)
+            const { saveAnnonce } = await import('./firebase/annonceService')
+            await saveAnnonce({ id, ...updatedData })
         } catch (error) {
             console.error("Erreur modification annonce:", error)
             alert("Erreur lors de la modification. Vérifiez votre connexion internet.")
@@ -441,191 +441,6 @@ function HomePage() {
     )
 }
 
-function DetailAnnonce() {
-    const { annonces, supprimerAnnonce, archiverAnnonce, togglePauseAnnonce } = useAnnonces()
-    const { user } = useAuth()
-    const navigate = useNavigate()
-    const [showModal, setShowModal] = useState(false)
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
-
-    const id = parseInt(window.location.pathname.split('/').pop())
-    const annonce = annonces.find(a => a.id === id)
-
-    if (!annonce) {
-        return (
-            <div className="container mx-auto px-4 py-12 text-center">
-                <h2 className="text-2xl font-bold text-gray-700">Annonce non trouvï¿½e</h2>
-                <button onClick={() => navigate('/')} className="mt-4 text-primary">? Retour ï¿½ l'accueil</button>
-            </div>
-        )
-    }
-
-    const shareUrl = window.location.href
-    const isAdmin = user && user.role === 'admin'
-
-    // Fonction pour ouvrir le modal ï¿½ une photo spï¿½cifique
-    const openModal = (index = 0) => {
-        setCurrentPhotoIndex(index)
-        setShowModal(true)
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ')
-
-        // Format la valeur
-        let displayValue
-        if (typeof value === 'boolean') {
-            displayValue = (
-                <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded flex items-center justify-center ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
-                        {value && (
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                            </svg>
-                        )}
-                    </div>
-                    <span className="font-semibold">{value ? 'Oui' : 'Non'}</span>
-                </div>
-            )
-        } else if (Array.isArray(value)) {
-            displayValue = <span className="font-semibold">{value.join(', ')}</span>
-        } else {
-            displayValue = <span className="font-semibold text-gray-900">{value}</span>
-        }
-
-        return (
-            <div key={key} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
-                <p className="text-sm text-gray-600 mb-1">{label}</p>
-                <div className="text-base">{displayValue}</div>
-            </div>
-        )
-    })
-}
-                                    </div >
-                                </div >
-                            )}
-
-{/* Admin Actions */ }
-{
-    isAdmin && (
-        <AdminActions
-            annonce={annonce}
-            onDelete={(id) => {
-                if (supprimerAnnonce(id)) {
-                    navigate('/')
-                }
-            }}
-            onArchive={archiverAnnonce}
-            onTogglePause={togglePauseAnnonce}
-        />
-    )
-}
-                        </div >
-
-    {/* Right Column - Contact & Share */ }
-    < div className = "space-y-6" >
-        {/* Contact */ }
-{
-    annonce.contact && (
-        <div className="bg-white rounded-xl p-6 shadow sticky top-4">
-            <h3 className="text-xl font-bold mb-4">?? Contact</h3>
-            <div className="space-y-3">
-                {annonce.contact.nom && (
-                    <p className="flex items-center gap-2">
-                        <User size={20} className="text-primary" />
-                        <strong>{annonce.contact.nom}</strong>
-                    </p>
-                )}
-                {annonce.contact.tel && (
-                    <p className="flex items-center gap-2">
-                        <Phone size={20} className="text-primary" />
-                        {annonce.contact.tel}
-                    </p>
-                )}
-                {annonce.contact.email && (
-                    <p className="flex items-center gap-2">
-                        <Mail size={20} className="text-primary" />
-                        {annonce.contact.email}
-                    </p>
-                )}
-            </div>
-
-            {/* Call to Action */}
-            <a
-                href={`tel:${annonce.contact.tel}`}
-                className="block mt-6 bg-gradient-to-r from-primary to-secondary text-white text-center py-3 rounded-lg font-bold hover:shadow-xl transition"
-            >
-                ?? Appeler maintenant
-            </a>
-        </div>
-    )
-}
-
-{/* Share */ }
-<div className="bg-white rounded-xl p-6 shadow">
-    <div className="flex items-center gap-2 mb-4">
-        <Share2 size={24} className="text-gray-700" />
-        <h3 className="text-xl font-bold">Partager</h3>
-    </div>
-    <div className="flex flex-col gap-3">
-        <a
-            href={`https://wa.me/?text=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 bg-[#25D366] text-white px-6 py-3.5 rounded-xl hover:bg-[#20BA5A] transition-all shadow-md hover:shadow-lg font-semibold"
-        >
-            <Phone size={20} />
-            WhatsApp
-        </a>
-        <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 bg-[#1877F2] text-white px-6 py-3.5 rounded-xl hover:bg-[#166FE5] transition-all shadow-md hover:shadow-lg font-semibold"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-            Facebook
-        </a>
-        <a
-            href={`https://www.tiktok.com/upload?caption=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 bg-black text-white px-6 py-3.5 rounded-xl hover:bg-gray-800 transition-all shadow-md hover:shadow-lg font-semibold"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-            </svg>
-            TikTok
-        </a>
-        <a
-            href={`https://www.instagram.com/`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white px-6 py-3.5 rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg font-semibold"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-            </svg>
-            Instagram
-        </a>
-    </div>
-</div>
-                        </div >
-                    </div >
-                </div >
-            </div >
-
-    {/* Modal Carousel */ }
-    < Modal isOpen = { showModal } onClose = {() => setShowModal(false)}>
-        <PhotoCarousel photos={annonce.photos} initialIndex={currentPhotoIndex} />
-            </Modal >
-        </>
-    )
-}
-
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -700,8 +515,8 @@ function NouvelleAnnonce() {
     const [photos, setPhotos] = useState([])
     const [isDragging, setIsDragging] = useState(false)
 
-    const handleSubmit = (annonceComplete) => {
-        const annonce = ajouterAnnonce(annonceComplete)
+    const handleSubmit = async (annonceComplete) => {
+        const annonce = await ajouterAnnonce(annonceComplete)
 
         // Message de confirmation détaillé
         const message = `🎉 ANNONCE PUBLIÉE AVEC SUCCÈS !\n\n` +
