@@ -18,7 +18,8 @@ export default function DetailAnnoncePro() {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
     const [dateSelection, setDateSelection] = useState({ start: null, end: null })
 
-    const annonce = annonces.find(a => a.id === parseInt(id))
+    // Récupérer l'annonce (gestion ID string Firebase vs ID number locale)
+    const annonce = annonces.find(a => String(a.id) === String(id))
 
     if (!annonce) {
         return (
