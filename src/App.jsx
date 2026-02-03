@@ -467,294 +467,161 @@ function DetailAnnonce() {
     const openModal = (index = 0) => {
         setCurrentPhotoIndex(index)
         setShowModal(true)
-    }
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
 
-    // Badge de statut
-    const StatusBadge = () => {
-        if (annonce.status === 'paused') {
-            return <span className="bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-semibold">?? En Pause</span>
-        }
-        if (annonce.status === 'archived') {
-            return <span className="bg-gray-500 text-white px-4 py-2 rounded-full text-sm font-semibold">?? Archivï¿½</span>
-        }
-        return null
-    }
-
-    return (
-        <>
-            <div className="bg-gray-50 min-h-screen">
-                <div className="container mx-auto px-4 py-8">
-                    {/* Header */}
-                    <div className="flex items-center justify-between mb-6">
-                        <button
-                            onClick={() => window.history.back()}
-                            className="text-primary hover:text-primary/80 font-semibold transition"
-                        >
-                            ? Retour
-                        </button>
-                        <StatusBadge />
+        // Format la valeur
+        let displayValue
+        if (typeof value === 'boolean') {
+            displayValue = (
+                <div className="flex items-center gap-2">
+                    <div className={`w-5 h-5 rounded flex items-center justify-center ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
+                        {value && (
+                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                            </svg>
+                        )}
                     </div>
-
-                    {/* Photos Grid - Cliquables */}
-                    <div className="grid grid-cols-4 gap-2 mb-8 rounded-xl overflow-hidden">
-                        <div
-                            className="col-span-3 row-span-2 cursor-pointer hover:opacity-90 transition"
-                            onClick={() => openModal(0)}
-                        >
-                            <img
-                                src={annonce.photos[0]}
-                                alt="Photo principale"
-                                className="w-full h-[500px] object-cover"
-                            />
-                        </div>
-                        {annonce.photos.slice(1, 5).map((photo, i) => (
-                            <div
-                                key={i}
-                                className="cursor-pointer hover:opacity-90 transition relative"
-                                onClick={() => openModal(i + 1)}
-                            >
-                                <img
-                                    src={photo}
-                                    alt={`Photo ${i + 2}`}
-                                    className="w-full h-[245px] object-cover"
-                                />
-                                {i === 3 && annonce.photos.length > 5 && (
-                                    <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-white text-2xl font-bold">
-                                        +{annonce.photos.length - 5}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Main Content */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Left Column - Details */}
-                        <div className="lg:col-span-2 space-y-6">
-                            {/* Title & Price */}
-                            <div className="bg-white rounded-xl p-6 shadow">
-                                <h1 className="text-4xl font-bold mb-4">{annonce.titre}</h1>
-                                <p className="text-5xl font-bold text-primary">{annonce.prix?.toLocaleString() || 'N/A'} FCFA</p>
-                                <div className="flex flex-wrap gap-2 mt-4">
-                                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                        {annonce.typeAnnonce || annonce.type}
-                                    </span>
-                                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                                        {annonce.categorie}
-                                    </span>
-                                    {annonce.sousCategorie && (
-                                        <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
-                                            {annonce.sousCategorie}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Location */}
-                            <div className="bg-white rounded-xl p-6 shadow border-l-4 border-pink-500">
-                                <div className="flex items-center gap-2 mb-4">
-                                    <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-                                        <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-800">Localisation</h3>
-                                </div>
-                                <div className="space-y-2">
-                                    <p className="text-gray-700">
-                                        <strong className="font-semibold">Ville :</strong> {annonce.ville}
-                                    </p>
-                                    {annonce.quartier && (
-                                        <p className="text-gray-700">
-                                            <strong className="font-semibold">Quartier :</strong> {annonce.quartier}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            <div className="bg-white rounded-xl p-6 shadow border-l-4 border-purple-500">
-                                <div className="flex items-center gap-2 mb-4">
-                                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                        <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-gray-800">Description</h3>
-                                </div>
-                                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{annonce.description}</p>
-                            </div>
-
-                            {/* Category Specific Details */}
-                            {annonce.details && Object.keys(annonce.details).length > 0 && (
-                                <div className="bg-white rounded-xl p-6 shadow border-l-4 border-blue-500">
-                                    <div className="flex items-center gap-2 mb-6">
-                                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                                                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-gray-800">Dï¿½tails</h3>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {Object.entries(annonce.details).map(([key, value]) => {
-                                            if (Array.isArray(value) && value.length === 0) return null
-                                            if (!value && value !== false) return null
-
-                                            // Format le nom de la clï¿½
-                                            const label = key
-                                                .replace(/_/g, ' ')
-                                                .split(' ')
-                                                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                                                .join(' ')
-
-                                            // Format la valeur
-                                            let displayValue
-                                            if (typeof value === 'boolean') {
-                                                displayValue = (
-                                                    <div className="flex items-center gap-2">
-                                                        <div className={`w-5 h-5 rounded flex items-center justify-center ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
-                                                            {value && (
-                                                                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                                                                </svg>
-                                                            )}
-                                                        </div>
-                                                        <span className="font-semibold">{value ? 'Oui' : 'Non'}</span>
-                                                    </div>
-                                                )
-                                            } else if (Array.isArray(value)) {
-                                                displayValue = <span className="font-semibold">{value.join(', ')}</span>
-                                            } else {
-                                                displayValue = <span className="font-semibold text-gray-900">{value}</span>
-                                            }
-
-                                            return (
-                                                <div key={key} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
-                                                    <p className="text-sm text-gray-600 mb-1">{label}</p>
-                                                    <div className="text-base">{displayValue}</div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Admin Actions */}
-                            {isAdmin && (
-                                <AdminActions
-                                    annonce={annonce}
-                                    onDelete={(id) => {
-                                        if (supprimerAnnonce(id)) {
-                                            navigate('/')
-                                        }
-                                    }}
-                                    onArchive={archiverAnnonce}
-                                    onTogglePause={togglePauseAnnonce}
-                                />
-                            )}
-                        </div>
-
-                        {/* Right Column - Contact & Share */}
-                        <div className="space-y-6">
-                            {/* Contact */}
-                            {annonce.contact && (
-                                <div className="bg-white rounded-xl p-6 shadow sticky top-4">
-                                    <h3 className="text-xl font-bold mb-4">?? Contact</h3>
-                                    <div className="space-y-3">
-                                        {annonce.contact.nom && (
-                                            <p className="flex items-center gap-2">
-                                                <User size={20} className="text-primary" />
-                                                <strong>{annonce.contact.nom}</strong>
-                                            </p>
-                                        )}
-                                        {annonce.contact.tel && (
-                                            <p className="flex items-center gap-2">
-                                                <Phone size={20} className="text-primary" />
-                                                {annonce.contact.tel}
-                                            </p>
-                                        )}
-                                        {annonce.contact.email && (
-                                            <p className="flex items-center gap-2">
-                                                <Mail size={20} className="text-primary" />
-                                                {annonce.contact.email}
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    {/* Call to Action */}
-                                    <a
-                                        href={`tel:${annonce.contact.tel}`}
-                                        className="block mt-6 bg-gradient-to-r from-primary to-secondary text-white text-center py-3 rounded-lg font-bold hover:shadow-xl transition"
-                                    >
-                                        ?? Appeler maintenant
-                                    </a>
-                                </div>
-                            )}
-
-                            {/* Share */}
-                            <div className="bg-white rounded-xl p-6 shadow">
-                                <div className="flex items-center gap-2 mb-4">
-                                    <Share2 size={24} className="text-gray-700" />
-                                    <h3 className="text-xl font-bold">Partager</h3>
-                                </div>
-                                <div className="flex flex-col gap-3">
-                                    <a
-                                        href={`https://wa.me/?text=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-3 bg-[#25D366] text-white px-6 py-3.5 rounded-xl hover:bg-[#20BA5A] transition-all shadow-md hover:shadow-lg font-semibold"
-                                    >
-                                        <Phone size={20} />
-                                        WhatsApp
-                                    </a>
-                                    <a
-                                        href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-3 bg-[#1877F2] text-white px-6 py-3.5 rounded-xl hover:bg-[#166FE5] transition-all shadow-md hover:shadow-lg font-semibold"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                                        </svg>
-                                        Facebook
-                                    </a>
-                                    <a
-                                        href={`https://www.tiktok.com/upload?caption=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-3 bg-black text-white px-6 py-3.5 rounded-xl hover:bg-gray-800 transition-all shadow-md hover:shadow-lg font-semibold"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                                        </svg>
-                                        TikTok
-                                    </a>
-                                    <a
-                                        href={`https://www.instagram.com/`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center justify-center gap-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white px-6 py-3.5 rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg font-semibold"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                                        </svg>
-                                        Instagram
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <span className="font-semibold">{value ? 'Oui' : 'Non'}</span>
                 </div>
+            )
+        } else if (Array.isArray(value)) {
+            displayValue = <span className="font-semibold">{value.join(', ')}</span>
+        } else {
+            displayValue = <span className="font-semibold text-gray-900">{value}</span>
+        }
+
+        return (
+            <div key={key} className="bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition">
+                <p className="text-sm text-gray-600 mb-1">{label}</p>
+                <div className="text-base">{displayValue}</div>
+            </div>
+        )
+    })
+}
+                                    </div >
+                                </div >
+                            )}
+
+{/* Admin Actions */ }
+{
+    isAdmin && (
+        <AdminActions
+            annonce={annonce}
+            onDelete={(id) => {
+                if (supprimerAnnonce(id)) {
+                    navigate('/')
+                }
+            }}
+            onArchive={archiverAnnonce}
+            onTogglePause={togglePauseAnnonce}
+        />
+    )
+}
+                        </div >
+
+    {/* Right Column - Contact & Share */ }
+    < div className = "space-y-6" >
+        {/* Contact */ }
+{
+    annonce.contact && (
+        <div className="bg-white rounded-xl p-6 shadow sticky top-4">
+            <h3 className="text-xl font-bold mb-4">?? Contact</h3>
+            <div className="space-y-3">
+                {annonce.contact.nom && (
+                    <p className="flex items-center gap-2">
+                        <User size={20} className="text-primary" />
+                        <strong>{annonce.contact.nom}</strong>
+                    </p>
+                )}
+                {annonce.contact.tel && (
+                    <p className="flex items-center gap-2">
+                        <Phone size={20} className="text-primary" />
+                        {annonce.contact.tel}
+                    </p>
+                )}
+                {annonce.contact.email && (
+                    <p className="flex items-center gap-2">
+                        <Mail size={20} className="text-primary" />
+                        {annonce.contact.email}
+                    </p>
+                )}
             </div>
 
-            {/* Modal Carousel */}
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-                <PhotoCarousel photos={annonce.photos} initialIndex={currentPhotoIndex} />
-            </Modal>
+            {/* Call to Action */}
+            <a
+                href={`tel:${annonce.contact.tel}`}
+                className="block mt-6 bg-gradient-to-r from-primary to-secondary text-white text-center py-3 rounded-lg font-bold hover:shadow-xl transition"
+            >
+                ?? Appeler maintenant
+            </a>
+        </div>
+    )
+}
+
+{/* Share */ }
+<div className="bg-white rounded-xl p-6 shadow">
+    <div className="flex items-center gap-2 mb-4">
+        <Share2 size={24} className="text-gray-700" />
+        <h3 className="text-xl font-bold">Partager</h3>
+    </div>
+    <div className="flex flex-col gap-3">
+        <a
+            href={`https://wa.me/?text=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 bg-[#25D366] text-white px-6 py-3.5 rounded-xl hover:bg-[#20BA5A] transition-all shadow-md hover:shadow-lg font-semibold"
+        >
+            <Phone size={20} />
+            WhatsApp
+        </a>
+        <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 bg-[#1877F2] text-white px-6 py-3.5 rounded-xl hover:bg-[#166FE5] transition-all shadow-md hover:shadow-lg font-semibold"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </svg>
+            Facebook
+        </a>
+        <a
+            href={`https://www.tiktok.com/upload?caption=${encodeURIComponent(annonce.titre + ' - ' + shareUrl)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 bg-black text-white px-6 py-3.5 rounded-xl hover:bg-gray-800 transition-all shadow-md hover:shadow-lg font-semibold"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+            </svg>
+            TikTok
+        </a>
+        <a
+            href={`https://www.instagram.com/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white px-6 py-3.5 rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg font-semibold"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+            Instagram
+        </a>
+    </div>
+</div>
+                        </div >
+                    </div >
+                </div >
+            </div >
+
+    {/* Modal Carousel */ }
+    < Modal isOpen = { showModal } onClose = {() => setShowModal(false)}>
+        <PhotoCarousel photos={annonce.photos} initialIndex={currentPhotoIndex} />
+            </Modal >
         </>
     )
 }
@@ -882,7 +749,7 @@ function App() {
                         <main className="flex-grow">
                             <Routes>
                                 <Route path="/" element={<HomePage />} />
-                                <Route path="/annonce/:id" element={<DetailAnnonce />} />
+                                <Route path="/annonce/:id" element={<DetailAnnoncePro />} />
                                 <Route path="/login" element={<LoginPage />} />
                                 <Route path="/nouvelle-annonce" element={
                                     <PrivateRoute>
