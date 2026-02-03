@@ -10,13 +10,22 @@ import ReserveNow from './ReserveNow'
 import RequestInfo from './RequestInfo'
 
 export default function DetailAnnoncePro() {
-    const { annonces, supprimerAnnonce, archiverAnnonce, togglePauseAnnonce } = useAnnonces()
+    const { annonces, loading } = useAnnonces()
     const { user } = useAuth()
     const navigate = useNavigate()
     const { id } = useParams()
     const [showModal, setShowModal] = useState(false)
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
     const [dateSelection, setDateSelection] = useState({ start: null, end: null })
+
+    // État de chargement
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        )
+    }
 
     // Récupérer l'annonce (gestion ID string Firebase vs ID number locale)
     const annonce = annonces.find(a => String(a.id) === String(id))

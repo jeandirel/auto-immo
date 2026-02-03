@@ -138,7 +138,8 @@ function AnnonceProvider({ children }) {
             modifierAnnonce,
             supprimerAnnonce,
             archiverAnnonce,
-            togglePauseAnnonce
+            togglePauseAnnonce,
+            loading
         }}>
             {children}
         </AnnonceContext.Provider>
