@@ -1,6 +1,6 @@
 ﻿import { useState, createContext, useContext, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom'
-import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin, Map } from 'lucide-react'
+import { Home, Car, Building, Eye, Laptop, Search, Plus, Share2, Phone, Mail, LogIn, LogOut, User, Upload, X, MapPin, Map, Database } from 'lucide-react'
 import FormulaireIntelligent from './FormulaireIntelligent'
 import { Modal, PhotoCarousel } from './components/Modal'
 import AdminActions from './components/AdminActions'
@@ -244,11 +244,31 @@ function Navbar() {
                         {user ? (
                             <>
                                 {user.role === 'admin' && (
-                                    <Link to="/nouvelle-annonce" className="flex items-center gap-2 bg-white text-primary px-3 py-2 md:px-4 rounded-lg hover:bg-gray-100 transition text-sm md:text-base">
-                                        <Plus size={18} />
-                                        <span className="hidden md:inline">Publier</span>
-                                        <span className="md:hidden">Publier</span>
-                                    </Link>
+                                    <>
+                                        <Link to="/nouvelle-annonce" className="flex items-center gap-2 bg-white text-primary px-3 py-2 md:px-4 rounded-lg hover:bg-gray-100 transition text-sm md:text-base">
+                                            <Plus size={18} />
+                                            <span className="hidden md:inline">Publier</span>
+                                            <span className="md:hidden">Publier</span>
+                                        </Link>
+                                        <button
+                                            onClick={() => {
+                                                if (window.confirm('Voulez-vous récupérer les anciennes données de ce téléphone vers Firebase ?')) {
+                                                    import('./firebase/migrationScript').then(({ resetMigration, migrateLocalStorageToFirebase }) => {
+                                                        resetMigration();
+                                                        migrateLocalStorageToFirebase().then(res => {
+                                                            alert(res.message);
+                                                            if (res.successCount > 0) window.location.reload();
+                                                        });
+                                                    });
+                                                }
+                                            }}
+                                            className="flex items-center gap-2 bg-gabon-yellow text-primary px-3 py-2 md:px-4 rounded-lg hover:bg-yellow-400 transition text-sm md:text-base font-bold shadow-md"
+                                            title="Récupérer les anciennes données locales"
+                                        >
+                                            <Database size={18} />
+                                            <span className="hidden md:inline">Récupérer</span>
+                                        </button>
+                                    </>
                                 )}
                                 <div className="flex items-center gap-2">
                                     <div className="flex items-center gap-2 bg-white/20 px-3 py-2 rounded-lg">
